@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tinder_app_new/core/constant/image_constant.dart';
 import 'package:tinder_app_new/core/constant/text_style_constant.dart';
@@ -16,6 +17,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   LoginScreenViewModel? model;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 gradient: LinearGradient(
-                  colors: [Colors.pinkAccent, Colors.pinkAccent.shade400],
+                  colors: [Colors.pinkAccent.shade400, Colors.pinkAccent],
                   begin: Alignment.bottomLeft,
                   end: Alignment.topRight,
                   stops: const [0.2, 0.7],
@@ -45,9 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       validator: (value) {
                         String pattern = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
                         RegExp regex = RegExp(pattern);
-                        return value == null || value.isEmpty || !regex.hasMatch(value)
-                            ? 'Enter valid email address'
-                            : null;
+                        return value == null || value.isEmpty || !regex.hasMatch(value) ? 'Enter valid email address' : null;
                       }),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.035),
                   customTextField(
@@ -72,8 +72,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     Padding(
                         padding: const EdgeInsets.only(right: 20, top: 10, bottom: 15),
                         child: GestureDetector(
-                            onTap: () {
+                            onTap: () async {
                               ///// SIGN UP SCREEN.
+                              print("************************************");
+                              await firestore.collection('collection').doc("abcd").set({'ehydfbeghf': 90});
+                              setState(() {});
                             },
                             child: const Text(
                               'Sign Up?',
