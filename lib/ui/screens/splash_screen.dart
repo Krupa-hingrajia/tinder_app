@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:tinder_app_new/core/constant/image_constant.dart';
 import 'package:tinder_app_new/core/routing/routes.dart';
 import 'package:tinder_app_new/core/view_model/base_view.dart';
 import 'package:tinder_app_new/core/view_model/screens_view_model/splash_screen_view_model.dart';
@@ -20,7 +21,19 @@ class _SplashScreenState extends State<SplashScreen> {
     return BaseView<SplashScreenViewModel>(
       builder: (buildContext, model, child) {
         return Scaffold(
-          body: Container(color: Colors.white, child: FlutterLogo(size: MediaQuery.of(context).size.height)),
+          body: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: LinearGradient(
+                colors: [Colors.pinkAccent.shade400, Colors.pinkAccent],
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+                stops: const [0.2, 0.7],
+                tileMode: TileMode.repeated,
+              ),
+            ),
+            child: Center(child: Image.asset(ImageConstant.splashLogo)),
+          ),
         );
       },
       onModelReady: (model) {
