@@ -1,6 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:tinder_app_new/core/view_model/base_view.dart';
 import 'package:tinder_app_new/core/view_model/screens_view_model/home_screen_view_model.dart';
@@ -33,48 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }, onModelReady: (model) {
       this.model = model;
-      getFirebaseImageFolder();
     });
-  }
-
-  Future getData() async {
-    try {
-      await downloadURLExample();
-      return downloadURL;
-    } catch (e) {
-      debugPrint("Error - $e");
-      return null;
-    }
-  }
-
-  Future getFirebaseImageFolder() async {
-    final storageRef = FirebaseStorage.instance.ref().child('images');
-    storageRef.listAll().then((result) {
-      print("result is $result");
-    });
-  }
-
-  Future<void> downloadURLExample() async {
-    downloadURL = await FirebaseStorage.instance.ref().child("Sample.png").getDownloadURL();
-  }
-
-  Future loadImage() async {
-    //current user id
-    final _userID = FirebaseAuth.instance.currentUser!.uid;
-
-    //collect the image name
-    DocumentSnapshot variable = await FirebaseFirestore.instance
-        .collection('data_user')
-        .doc('user')
-        .collection('personal_data')
-        .doc(_userID)
-        .get();
-
-    //select the image url
-    Reference ref = FirebaseStorage.instance.ref().child("images_1.jpeg");
-
-    //get image url from firebase storage
-    var url = await ref.getDownloadURL();
-    return url;
   }
 }

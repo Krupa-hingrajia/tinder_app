@@ -7,18 +7,18 @@ class DragWidget extends StatefulWidget {
   const DragWidget({
     Key? key,
     required this.profile,
+    this.onPressedLike,
+    this.onPressedCancel,
     required this.index,
     required this.swipeNotifier,
-    required this.onPressed,
-    required this.icon,
     this.isLastCard = false,
   }) : super(key: key);
   final ProfilePicture profile;
+  final VoidCallback? onPressedLike;
+  final VoidCallback? onPressedCancel;
   final int index;
   final ValueNotifier<Swipe> swipeNotifier;
   final bool isLastCard;
-  final VoidCallback onPressed;
-  final Icon icon;
 
   @override
   State<DragWidget> createState() => _DragWidgetState();
@@ -44,11 +44,11 @@ class _DragWidgetState extends State<DragWidget> {
                     : const AlwaysStoppedAnimation(0),
                 child: Stack(
                   children: [
-                    ProfileCard(profile: widget.profile, onPressed: widget.onPressed, icon: widget.icon),
+                    ProfileCard(profile: widget.profile, onPressedLike: widget.onPressedLike, onPressedCancel: widget.onPressedCancel),
                     widget.swipeNotifier.value != Swipe.none
                         ? widget.swipeNotifier.value == Swipe.right
                             ? Positioned(
-                                top: 40,
+                                top: 170,
                                 left: 20,
                                 child: Transform.rotate(
                                   angle: 12,
@@ -59,13 +59,13 @@ class _DragWidgetState extends State<DragWidget> {
                                 ),
                               )
                             : Positioned(
-                                top: 50,
+                                top: 180,
                                 right: 24,
                                 child: Transform.rotate(
                                   angle: -12,
-                                  child: TagWidget(
+                                  child: const TagWidget(
                                     text: 'DISLIKE',
-                                    color: Colors.red[400]!,
+                                    color: Colors.white,
                                   ),
                                 ),
                               )
@@ -98,12 +98,12 @@ class _DragWidgetState extends State<DragWidget> {
             builder: (BuildContext context, Swipe swipe, Widget? child) {
               return Stack(
                 children: [
-                  ProfileCard(profile: widget.profile, onPressed: widget.onPressed, icon: widget.icon),
+                  ProfileCard(profile: widget.profile, onPressedLike: widget.onPressedLike, onPressedCancel: widget.onPressedCancel),
                   // heck if this is the last card and Swipe is not equal to Swipe.none
                   swipe != Swipe.none && widget.isLastCard
                       ? swipe == Swipe.right
                           ? Positioned(
-                              top: 40,
+                              top: 170,
                               left: 20,
                               child: Transform.rotate(
                                 angle: 12,
@@ -114,13 +114,13 @@ class _DragWidgetState extends State<DragWidget> {
                               ),
                             )
                           : Positioned(
-                              top: 50,
+                              top: 180,
                               right: 24,
                               child: Transform.rotate(
                                 angle: -12,
-                                child: TagWidget(
+                                child: const TagWidget(
                                   text: 'DISLIKE',
-                                  color: Colors.red[400]!,
+                                  color: Colors.white,
                                 ),
                               ),
                             )
@@ -167,113 +167,115 @@ class TagWidget extends StatelessWidget {
 }
 
 class ProfileCard extends StatelessWidget {
-  const ProfileCard({Key? key, required this.profile, required this.onPressed, required this.icon}) : super(key: key);
+  const ProfileCard({Key? key, required this.profile, this.onPressedLike, this.onPressedCancel}) : super(key: key);
   final ProfilePicture profile;
-  final VoidCallback onPressed;
-  final Icon icon;
+  final VoidCallback? onPressedLike;
+  final VoidCallback? onPressedCancel;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 580,
-      width: 340,
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.network(
-                profile.imageURL,
-                fit: BoxFit.fitHeight,
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            child: Container(
-              height: 120,
-              width: 340,
-              decoration: ShapeDecoration(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                shadows: <BoxShadow>[
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 8,
+    return Column(
+      children: [
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.20,
+        ),
+        Container(
+          height: MediaQuery.of(context).size.height * 0.65,
+          width: MediaQuery.of(context).size.width * 0.90,
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Image.network(
+                    profile.imageURL,
+                    fit: BoxFit.fitHeight,
                   ),
-                ],
+                ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      profile.userName,
-                      style: const TextStyle(
-                        fontFamily: 'Nunito',
-                        fontWeight: FontWeight.w800,
-                        fontSize: 21,
-                      ),
+              Positioned(
+                bottom: 25,
+                left: 25,
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.11,
+                  width: MediaQuery.of(context).size.width * 0.93,
+                  decoration: ShapeDecoration(
+                    color: Colors.white.withOpacity(0.8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                    Text(
-                      profile.gender,
-                      style: const TextStyle(
-                        fontFamily: 'Nunito',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                        color: Colors.grey,
+                    shadows: <BoxShadow>[
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 8,
                       ),
-                    ),
-                    Row(
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Card(
-                          elevation: 10,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(35.0),
+                        Text(
+                          profile.userName,
+                          style: const TextStyle(
+                            fontFamily: 'Nunito',
+                            fontWeight: FontWeight.w800,
+                            fontSize: 21,
                           ),
-                          child: IconButton(onPressed: onPressed, icon: icon),
                         ),
-                        /* Card(
-                          elevation: 10,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(35.0),
+                        Text(
+                          profile.gender,
+                          style: const TextStyle(
+                            fontFamily: 'Nunito',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                            //color: Colors.grey,
                           ),
-                          child: IconButton(onPressed: onPressed, icon: icon),
-                        ),*/
+                        ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class ActionButtonWidget extends StatelessWidget {
-  const ActionButtonWidget({Key? key, required this.onPressed, required this.icon}) : super(key: key);
-  final VoidCallback onPressed;
-  final Icon icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      shape: const CircleBorder(),
-      child: Card(
-        elevation: 10,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(35.0),
         ),
-        child: IconButton(onPressed: onPressed, icon: icon),
-      ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.01,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Card(
+              elevation: 6,
+              shadowColor: Colors.grey.withOpacity(0.09),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(35.0),
+              ),
+              child: IconButton(onPressed: onPressedCancel, icon: const Icon(Icons.close), color: Colors.grey),
+            ),
+            Card(
+              elevation: 6,
+              shadowColor: Colors.grey.withOpacity(0.09),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(35.0),
+              ),
+              child: IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
+            ),
+            Card(
+              elevation: 6,
+              shadowColor: Colors.grey.withOpacity(0.09),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(35.0),
+              ),
+              child: IconButton(onPressed: onPressedLike, icon: const Icon(Icons.favorite), color: Colors.red),
+            ),
+          ],
+        )
+      ],
     );
   }
 }
