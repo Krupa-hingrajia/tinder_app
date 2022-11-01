@@ -33,7 +33,8 @@ class SignUpScreenViewModel extends BaseModel {
         password: passwordController.text,
       );
       // ignore: use_build_context_synchronously
-      Navigator.pushNamedAndRemoveUntil(context, Routes.homeScreen, (route) => false);
+      Navigator.pushNamedAndRemoveUntil(context, Routes.allScreenBottom, (route) => false);
+      // Navigator.pushNamedAndRemoveUntil(context, Routes.bottomAppBar, (route) => false);
     } on FirebaseAuthException catch (e) {
       signupCircular = false;
       if (e.code == 'weak-password') {

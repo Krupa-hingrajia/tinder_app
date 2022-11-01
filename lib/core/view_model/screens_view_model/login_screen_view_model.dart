@@ -19,7 +19,7 @@ class LoginScreenViewModel extends BaseModel {
         password: passwordController.text,
       );
       // ignore: use_build_context_synchronously
-      Navigator.pushNamedAndRemoveUntil(context, Routes.homeScreen, (route) => false);
+      Navigator.pushNamedAndRemoveUntil(context, Routes.allScreenBottom, (route) => false);
     } on FirebaseAuthException catch (e) {
       loginCircular = false;
       if (e.code == 'wrong-password') {

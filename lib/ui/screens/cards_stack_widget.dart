@@ -49,8 +49,8 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
     // list.clear();
     var data = await FirebaseFirestore.instance.collection('Users').get();
     for (int i = 0; i < data.docs.length; i++) {
-      ProfilePicture model = ProfilePicture(data.docs[i].data()['image_url'], data.docs[i].data()['name'], data.docs[i].data()['gender'],
-          data.docs[i].data()['id'], data.docs[i].data()['isFavourite']);
+      ProfilePicture model = ProfilePicture(data.docs[i].data()['image_url'], data.docs[i].data()['name'],
+          data.docs[i].data()['gender'], data.docs[i].data()['id'], data.docs[i].data()['isFavourite']);
       list.add(model);
     }
   }

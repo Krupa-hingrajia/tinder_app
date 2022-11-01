@@ -31,34 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       );
-      /* return Scaffold(
-        appBar: AppBar(
-          backgroundColor: ColorConstant.pinkAccent,
-        ),
-        body: FutureBuilder(
-          future: loadImage(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return const Text(
-                "Something went wrong",
-              );
-            }
-            if (snapshot.connectionState == ConnectionState.done) {
-              */ /*return ListView.builder(
-                  itemCount: snapshot.data,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Image.network(
-                      snapshot.data.toString(),
-                    );
-                  });*/ /*
-              return Image.network(
-                snapshot.data.toString(),
-              );
-            }
-            return const Center(child: CircularProgressIndicator());
-          },
-        ),
-      );*/
     }, onModelReady: (model) {
       this.model = model;
       getFirebaseImageFolder();
@@ -84,9 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> downloadURLExample() async {
     downloadURL = await FirebaseStorage.instance.ref().child("Sample.png").getDownloadURL();
-    print("*************************${downloadURL.toString()}");
-    //print("*************************${ref.getDownloadURL()}");
-    // return ref.getDownloadURL();
   }
 
   Future loadImage() async {
@@ -94,17 +63,18 @@ class _HomeScreenState extends State<HomeScreen> {
     final _userID = FirebaseAuth.instance.currentUser!.uid;
 
     //collect the image name
-    DocumentSnapshot variable = await FirebaseFirestore.instance.collection('data_user').doc('user').collection('personal_data').doc(_userID).get();
-
-    //a list of images names (i need only one)
-    var _file_name = variable['path_profile_image'];
+    DocumentSnapshot variable = await FirebaseFirestore.instance
+        .collection('data_user')
+        .doc('user')
+        .collection('personal_data')
+        .doc(_userID)
+        .get();
 
     //select the image url
     Reference ref = FirebaseStorage.instance.ref().child("images_1.jpeg");
 
     //get image url from firebase storage
     var url = await ref.getDownloadURL();
-    print('url: ' + url);
     return url;
   }
 }
