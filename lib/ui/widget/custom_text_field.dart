@@ -20,6 +20,8 @@ customTextField(
         labelText: text ?? '',
         labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
         errorStyle: const TextStyle(color: Colors.white, fontSize: 15),
+        focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18), borderSide: const BorderSide(color: Colors.white, width: 2.0)),
         errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(18), borderSide: const BorderSide(color: Colors.white)),
         border: OutlineInputBorder(
