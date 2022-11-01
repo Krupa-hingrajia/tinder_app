@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:tinder_app_new/core/constant/color_constant.dart';
 import 'package:tinder_app_new/core/constant/image_constant.dart';
 import 'package:tinder_app_new/core/routing/routes.dart';
 import 'package:tinder_app_new/core/view_model/base_view.dart';
@@ -25,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               gradient: LinearGradient(
-                colors: [Colors.pinkAccent.shade400, Colors.pinkAccent],
+                colors: [ColorConstant.pinkAccentShade, ColorConstant.pinkAccent],
                 begin: Alignment.bottomLeft,
                 end: Alignment.topRight,
                 stops: const [0.2, 0.7],

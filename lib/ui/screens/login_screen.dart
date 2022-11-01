@@ -6,6 +6,7 @@ import 'package:tinder_app_new/core/view_model/base_view.dart';
 import 'package:tinder_app_new/ui/widget/custom_btn.dart';
 import 'package:tinder_app_new/ui/widget/custom_text_field.dart';
 
+import '../../core/constant/color_constant.dart';
 import '../../core/view_model/screens_view_model/login_screen_view_model.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -30,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 gradient: LinearGradient(
-                  colors: [Colors.pinkAccent.shade400, Colors.pinkAccent],
+                  colors: [ColorConstant.pinkAccentShade, ColorConstant.pinkAccent],
                   begin: Alignment.bottomLeft,
                   end: Alignment.topRight,
                   stops: const [0.2, 0.7],
@@ -74,9 +75,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: GestureDetector(
                             onTap: () async {
                               ///// SIGN UP SCREEN.
-                              print("************************************");
-                              await firestore.collection('collection').doc("abcd").set({'ehydfbeghf': 90});
-                              setState(() {});
                             },
                             child: const Text(
                               'Sign Up?',
