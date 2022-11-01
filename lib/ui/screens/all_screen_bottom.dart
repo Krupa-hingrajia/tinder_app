@@ -39,62 +39,32 @@ class _AllScreenBottomState extends State<AllScreenBottom> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           IconButton(
-            enableFeedback: false,
-            onPressed: () {
-              setState(() {
+              enableFeedback: false,
+              onPressed: () {
                 model!.pageIndex = 0;
-              });
-            },
-            icon: model!.pageIndex == 0
-                ? const Icon(
-                    Icons.home_filled,
-                    color: Colors.white,
-                    size: 35,
-                  )
-                : const Icon(
-                    Icons.home_outlined,
-                    color: Colors.white,
-                    size: 35,
-                  ),
-          ),
+                setState(() {});
+              },
+              icon: model!.pageIndex == 0
+                  ? const Icon(Icons.home_filled, color: Colors.white, size: 35)
+                  : const Icon(Icons.home_outlined, color: Colors.white, size: 35)),
           IconButton(
-            enableFeedback: false,
-            onPressed: () {
-              setState(() {
+              enableFeedback: false,
+              onPressed: () {
                 model!.pageIndex = 1;
-              });
-            },
-            icon: model!.pageIndex == 1
-                ? const Icon(
-                    Icons.chat,
-                    color: Colors.white,
-                    size: 35,
-                  )
-                : const Icon(
-                    Icons.chat_outlined,
-                    color: Colors.white,
-                    size: 35,
-                  ),
-          ),
+                setState(() {});
+              },
+              icon: model!.pageIndex == 1
+                  ? const Icon(Icons.chat, color: Colors.white, size: 35)
+                  : const Icon(Icons.chat_outlined, color: Colors.white, size: 35)),
           IconButton(
-            enableFeedback: false,
-            onPressed: () {
-              setState(() {
+              enableFeedback: false,
+              onPressed: () {
                 model!.pageIndex = 2;
-              });
-            },
-            icon: model!.pageIndex == 2
-                ? const Icon(
-                    Icons.person,
-                    color: Colors.white,
-                    size: 35,
-                  )
-                : const Icon(
-                    Icons.person_outline,
-                    color: Colors.white,
-                    size: 35,
-                  ),
-          ),
+                setState(() {});
+              },
+              icon: model!.pageIndex == 2
+                  ? const Icon(Icons.person, color: Colors.white, size: 35)
+                  : const Icon(Icons.person_outline, color: Colors.white, size: 35)),
         ],
       ),
     );
