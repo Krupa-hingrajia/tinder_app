@@ -33,8 +33,8 @@ class _AllScreenBottomState extends State<AllScreenBottom> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.080,
       decoration: const BoxDecoration(
-        color: ColorConstant.pinkAccent,
-      ),
+          color: ColorConstant.pink,
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

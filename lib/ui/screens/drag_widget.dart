@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tinder_app_new/core/enum/viewstate.dart';
 import 'package:tinder_app_new/core/model/cards_model.dart';
-
-import '../../core/enum.dart';
 
 class DragWidget extends StatefulWidget {
   const DragWidget({
@@ -44,7 +43,10 @@ class _DragWidgetState extends State<DragWidget> {
                     : const AlwaysStoppedAnimation(0),
                 child: Stack(
                   children: [
-                    ProfileCard(profile: widget.profile, onPressedLike: widget.onPressedLike, onPressedCancel: widget.onPressedCancel),
+                    ProfileCard(
+                        profile: widget.profile,
+                        onPressedLike: widget.onPressedLike,
+                        onPressedCancel: widget.onPressedCancel),
                     widget.swipeNotifier.value != Swipe.none
                         ? widget.swipeNotifier.value == Swipe.right
                             ? Positioned(
@@ -77,10 +79,12 @@ class _DragWidgetState extends State<DragWidget> {
           ),
         ),
         onDragUpdate: (DragUpdateDetails dragUpdateDetails) {
-          if (dragUpdateDetails.delta.dx > 0 && dragUpdateDetails.globalPosition.dx > MediaQuery.of(context).size.width / 2) {
+          if (dragUpdateDetails.delta.dx > 0 &&
+              dragUpdateDetails.globalPosition.dx > MediaQuery.of(context).size.width / 2) {
             widget.swipeNotifier.value = Swipe.right;
           }
-          if (dragUpdateDetails.delta.dx < 0 && dragUpdateDetails.globalPosition.dx < MediaQuery.of(context).size.width / 2) {
+          if (dragUpdateDetails.delta.dx < 0 &&
+              dragUpdateDetails.globalPosition.dx < MediaQuery.of(context).size.width / 2) {
             widget.swipeNotifier.value = Swipe.left;
           }
         },
@@ -98,7 +102,10 @@ class _DragWidgetState extends State<DragWidget> {
             builder: (BuildContext context, Swipe swipe, Widget? child) {
               return Stack(
                 children: [
-                  ProfileCard(profile: widget.profile, onPressedLike: widget.onPressedLike, onPressedCancel: widget.onPressedCancel),
+                  ProfileCard(
+                      profile: widget.profile,
+                      onPressedLike: widget.onPressedLike,
+                      onPressedCancel: widget.onPressedCancel),
                   // heck if this is the last card and Swipe is not equal to Swipe.none
                   swipe != Swipe.none && widget.isLastCard
                       ? swipe == Swipe.right
@@ -174,108 +181,96 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.15,
-        ),
-        Container(
-          height: MediaQuery.of(context).size.height * 0.65,
-          width: MediaQuery.of(context).size.width * 0.90,
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Stack(
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.15,
+          ),
+          Container(
+              height: MediaQuery.of(context).size.height * 0.65,
+              width: MediaQuery.of(context).size.width * 0.90,
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Stack(children: [
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image.network(
+                      profile.imageURL,
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
+                ),
+                Positioned(
+                    bottom: 25,
+                    left: 25,
+                    child: Container(
+                        height: MediaQuery.of(context).size.height * 0.11,
+                        width: MediaQuery.of(context).size.width * 0.93,
+                        decoration: ShapeDecoration(
+                          color: Colors.white.withOpacity(0.8),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          shadows: <BoxShadow>[
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 8,
+                            ),
+                          ],
+                        ),
+                        child: Padding(
+                            padding: const EdgeInsets.only(left: 20),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    profile.userName,
+                                    style: const TextStyle(
+                                      fontFamily: 'Nunito',
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 21,
+                                    ),
+                                  ),
+                                  Text(profile.gender,
+                                      style: const TextStyle(
+                                          fontFamily: 'Nunito', fontWeight: FontWeight.w600, fontSize: 14))
+                                ]))))
+              ])),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Positioned.fill(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Image.network(
-                    profile.imageURL,
-                    fit: BoxFit.fitHeight,
-                  ),
+              Card(
+                elevation: 6,
+                shadowColor: Colors.grey.withOpacity(0.09),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(35.0),
                 ),
+                child: IconButton(onPressed: onPressedCancel, icon: const Icon(Icons.close), color: Colors.grey),
               ),
-              Positioned(
-                bottom: 25,
-                left: 25,
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.11,
-                  width: MediaQuery.of(context).size.width * 0.93,
-                  decoration: ShapeDecoration(
-                    color: Colors.white.withOpacity(0.8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    shadows: <BoxShadow>[
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 8,
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          profile.userName,
-                          style: const TextStyle(
-                            fontFamily: 'Nunito',
-                            fontWeight: FontWeight.w800,
-                            fontSize: 21,
-                          ),
-                        ),
-                        Text(
-                          profile.gender,
-                          style: const TextStyle(
-                            fontFamily: 'Nunito',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                            //color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+              Card(
+                elevation: 6,
+                shadowColor: Colors.grey.withOpacity(0.09),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(35.0),
                 ),
+                child: IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
+              ),
+              Card(
+                elevation: 6,
+                shadowColor: Colors.grey.withOpacity(0.09),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(35.0),
+                ),
+                child: IconButton(onPressed: onPressedLike, icon: const Icon(Icons.favorite), color: Colors.red),
               ),
             ],
-          ),
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.01,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Card(
-              elevation: 6,
-              shadowColor: Colors.grey.withOpacity(0.09),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(35.0),
-              ),
-              child: IconButton(onPressed: onPressedCancel, icon: const Icon(Icons.close), color: Colors.grey),
-            ),
-            Card(
-              elevation: 6,
-              shadowColor: Colors.grey.withOpacity(0.09),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(35.0),
-              ),
-              child: IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
-            ),
-            Card(
-              elevation: 6,
-              shadowColor: Colors.grey.withOpacity(0.09),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(35.0),
-              ),
-              child: IconButton(onPressed: onPressedLike, icon: const Icon(Icons.favorite), color: Colors.red),
-            ),
-          ],
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -185,8 +184,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: MediaQuery.of(context).size.height * 0.052,
                       width: MediaQuery.of(context).size.width * 0.45,
                       onPressed: () async {
-                        // imageFile == null ? model.imageError = true : model.imageError = false;
-                        setState(() {});
                         if (model.formKey.currentState!.validate()) {
                           if (imageFile == null) {
                             model.imageError = true;
@@ -197,14 +194,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           } else {
                             model.createUser(context: context);
                             model.addTinderUser();
+                            model.setDate();
                             model.imageError == true || model.selectGender == true
                                 ? model.signupCircular = true
                                 : model.signupCircular = false;
                             setState(() {});
                           }
+                          model.signupCircular = true;
+                          setState(() {});
                         }
-                        // model.signupCircular = true;
-                        // setState(() {});
                       }),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.036),
                 ],
@@ -251,14 +249,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
   _getFromGallery() async {
     final XFile? pickImage = await imagePicker.pickImage(source: ImageSource.gallery);
     imageFile = (File(pickImage!.path));
-    String fileName = imageFile!.path.split('image_picker_')[1];
-    // print('Fill name $fileName');
+    String fileName = imageFile!.path.split('image_picker')[1];
+    print('image Url $fileName');
 
     var snapshot = await firebaseStorage.ref().child('images/$fileName').putFile(imageFile!);
     var downloadUrl = await snapshot.ref.getDownloadURL();
     setState(() {
       model!.imageUrl = downloadUrl;
-      // print('image Url ${model!.imageUrl}');
+      print('image Url ${model!.imageUrl}');
     });
   }
 
@@ -266,14 +264,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
   _getFromCamera() async {
     final XFile? pickImage = await imagePicker.pickImage(source: ImageSource.camera);
     imageFile = (File(pickImage!.path));
-    String fileName = imageFile!.path.split('image_picker_')[1];
-    // print('Fill name $fileName');
+    String fileName = imageFile!.path.split('image_picker')[1];
+    print('image Url $fileName');
 
     var snapshot = await firebaseStorage.ref().child('images/$fileName').putFile(imageFile!);
     var downloadUrl = await snapshot.ref.getDownloadURL();
     setState(() {
       model!.imageUrl = downloadUrl;
-      // print('image Url ${model!.imageUrl}');
+      print('image Url ${model!.imageUrl}');
     });
   }
 }
