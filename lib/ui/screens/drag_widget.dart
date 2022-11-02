@@ -177,7 +177,7 @@ class ProfileCard extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.20,
+          height: MediaQuery.of(context).size.height * 0.15,
         ),
         Container(
           height: MediaQuery.of(context).size.height * 0.65,
