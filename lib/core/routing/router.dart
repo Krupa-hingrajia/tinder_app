@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tinder_app_new/core/model/profile_model.dart';
 import 'package:tinder_app_new/core/routing/routes.dart';
 import 'package:tinder_app_new/ui/screens/all_screen_bottom.dart';
 import 'package:tinder_app_new/ui/screens/login_screen.dart';

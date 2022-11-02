@@ -9,6 +9,6 @@ class AllScreenBottomViewModel extends BaseModel {
   final pages = [
     const HomeScreen(),
     const Page2(),
-    const SettingScreen(),
+    SettingScreen(/*screenArguments: ProfileData(name: nameController.text)*/),
   ];
 }

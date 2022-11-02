@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tinder_app_new/core/constant/color_constant.dart';
-
-import '../../core/enum.dart';
+import 'package:tinder_app_new/core/enum/viewstate.dart';
 import '../../core/model/cards_model.dart';
 import 'drag_widget.dart';
 
@@ -184,7 +183,6 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
           ),
         ),
       ],
-
       /*   Stack(
         clipBehavior: Clip.none,
         children: [

@@ -1,11 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tinder_app_new/core/routing/routes.dart';
 import 'package:tinder_app_new/core/view_model/base_model.dart';
 import 'package:tinder_app_new/ui/widget/costom_snk.dart';
 
 class SignUpScreenViewModel extends BaseModel {
+  var token;
+  final firebaseMessaging = FirebaseMessaging.instance;
   FirebaseFirestore tinderUsers = FirebaseFirestore.instance;
   final formKey = GlobalKey<FormState>();
   bool signupCircular = false;
@@ -26,6 +30,15 @@ class SignUpScreenViewModel extends BaseModel {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPassController = TextEditingController();
 
+  setDate() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('name', nameController.text);
+    prefs.setString('email', emailController.text);
+    prefs.setString('image', imageUrl.toString());
+    prefs.setString('gender', selectValue.toString());
+    updateUI();
+  }
+
   createUser({required BuildContext context}) async {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -34,7 +47,6 @@ class SignUpScreenViewModel extends BaseModel {
       );
       // ignore: use_build_context_synchronously
       Navigator.pushNamedAndRemoveUntil(context, Routes.allScreenBottom, (route) => false);
-      // Navigator.pushNamedAndRemoveUntil(context, Routes.bottomAppBar, (route) => false);
     } on FirebaseAuthException catch (e) {
       signupCircular = false;
       if (e.code == 'weak-password') {
@@ -47,7 +59,10 @@ class SignUpScreenViewModel extends BaseModel {
     }
   }
 
-  addTinderUser() {
+  addTinderUser() async {
+    await firebaseMessaging.getToken().then((value) {
+      token = value;
+    });
     String id = tinderUsers.collection("Users").doc().id;
     return tinderUsers
         .collection("Users")
@@ -58,7 +73,8 @@ class SignUpScreenViewModel extends BaseModel {
           'gender': selectValue.toString(),
           'image_url': imageUrl,
           'isFavourite': false,
-          'id': id
+          'useToken': token,
+          'id': id,
         })
         .then((value) => print("User data Added"))
         .catchError((error) => print("User couldn't be added."));

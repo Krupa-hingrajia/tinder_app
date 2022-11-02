@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:tinder_app_new/core/routing/router.dart';
 
@@ -25,8 +26,8 @@ class _MyappState extends State<Myapp> {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       // initialRoute: Routes.splashScreen,
-      initialRoute: Routes.allScreenBottom,
-      // initialRoute: Routes.signupScreen,
+      // initialRoute: Routes.allScreenBottom,
+      initialRoute: Routes.signupScreen,
       onGenerateRoute: PageRouter.generateRoutes,
     );
   }
