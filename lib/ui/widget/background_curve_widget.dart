@@ -9,18 +9,15 @@ class BackGroundCurveWidget extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 350,
-      decoration: ShapeDecoration(
-        shape: const RoundedRectangleBorder(
+      decoration: const ShapeDecoration(
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(64),
             bottomRight: Radius.circular(64),
           ),
         ),
         gradient: LinearGradient(
-          colors: <Color>[
-            ColorConstant.pinkAccentShade,
-            ColorConstant.pinkAccent,
-          ],
+          colors: <Color>[ColorConstant.yellowLight, ColorConstant.greenLight],
         ),
       ),
       child: const Padding(
@@ -30,7 +27,7 @@ class BackGroundCurveWidget extends StatelessWidget {
           style: TextStyle(
             fontFamily: 'Nunito',
             fontWeight: FontWeight.w800,
-            color: Colors.white,
+            color: ColorConstant.black,
             fontSize: 36,
           ),
         ),
