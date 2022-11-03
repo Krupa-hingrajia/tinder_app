@@ -33,7 +33,9 @@ class _AllScreenBottomState extends State<AllScreenBottom> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.080,
       decoration: const BoxDecoration(
-          color: ColorConstant.pink,
+          gradient: LinearGradient(
+            colors: <Color>[ColorConstant.yellowLight, ColorConstant.greenLight],
+          ),
           borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -45,17 +47,16 @@ class _AllScreenBottomState extends State<AllScreenBottom> {
                 setState(() {});
               },
               icon: model!.pageIndex == 0
-                  ? const Icon(Icons.home_filled, color: Colors.white, size: 35)
-                  : const Icon(Icons.home_outlined, color: Colors.white, size: 35)),
+                  ? const Icon(Icons.home_filled, size: 35)
+                  : const Icon(Icons.home_outlined, size: 35)),
           IconButton(
               enableFeedback: false,
               onPressed: () {
                 model!.pageIndex = 1;
                 setState(() {});
               },
-              icon: model!.pageIndex == 1
-                  ? const Icon(Icons.chat, color: Colors.white, size: 35)
-                  : const Icon(Icons.chat_outlined, color: Colors.white, size: 35)),
+              icon:
+                  model!.pageIndex == 1 ? const Icon(Icons.chat, size: 35) : const Icon(Icons.chat_outlined, size: 35)),
           IconButton(
               enableFeedback: false,
               onPressed: () {
@@ -63,8 +64,8 @@ class _AllScreenBottomState extends State<AllScreenBottom> {
                 setState(() {});
               },
               icon: model!.pageIndex == 2
-                  ? const Icon(Icons.person, color: Colors.white, size: 35)
-                  : const Icon(Icons.person_outline, color: Colors.white, size: 35)),
+                  ? const Icon(Icons.person, size: 35)
+                  : const Icon(Icons.person_outline, size: 35)),
         ],
       ),
     );

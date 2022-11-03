@@ -8,4 +8,6 @@ class ColorConstant {
   static const Color pinkAccent = Colors.pinkAccent;
   static Color grey600 = Colors.grey.shade600;
   static const Color orange = Colors.orange;
+  static const Color yellowLight = Color(0xFFfaf6a2);
+  static const Color greenLight = Color(0xFFc1f8b3);
 }

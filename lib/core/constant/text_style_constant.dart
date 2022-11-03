@@ -8,6 +8,6 @@ class TextStyleConstant {
   static const TextStyle logInBtnStyle =
       TextStyle(color: ColorConstant.pink, fontSize: 16, fontWeight: FontWeight.w500);
   static const TextStyle settingNameStyle =
-      TextStyle(color: ColorConstant.white, fontSize: 20, fontWeight: FontWeight.bold);
-  static const TextStyle settingEmailStyle = TextStyle(color: ColorConstant.white, fontSize: 18);
+      TextStyle(color: ColorConstant.black, fontSize: 20, fontWeight: FontWeight.bold);
+  static const TextStyle settingEmailStyle = TextStyle(color: ColorConstant.black, fontSize: 18);
 }
