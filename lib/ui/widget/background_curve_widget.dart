@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:tinder_app_new/core/constant/color_constant.dart';
 
-class BackGroundCurveWidget extends StatelessWidget {
+class BackGroundCurveWidget extends StatefulWidget {
   const BackGroundCurveWidget({Key? key}) : super(key: key);
 
+  @override
+  State<BackGroundCurveWidget> createState() => _BackGroundCurveWidgetState();
+}
+
+class _BackGroundCurveWidgetState extends State<BackGroundCurveWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,7 +29,7 @@ class BackGroundCurveWidget extends StatelessWidget {
         ),
       ),
       child: const Padding(
-        padding: EdgeInsets.only(top: 46.0, left: 20.0),
+        padding: EdgeInsets.only(top: 46.0, left: 20.0, right: 20.0),
         child: Text(
           'Tinder',
           style: TextStyle(

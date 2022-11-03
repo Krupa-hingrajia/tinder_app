@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'core/provider/theme_changer.dart';
 import 'core/routing/locator/locator.dart';
 import 'core/routing/router.dart';
 import 'core/routing/routes.dart';
@@ -10,7 +12,23 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   setLocator();
-  runApp(const Myapp());
+
+  SharedPreferences.getInstance().then((prefs) {
+    var darkModeOn = prefs.getBool("darkMode") ?? true;
+
+    runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ThemeNotifier>(
+          create: (context) {
+            return ThemeNotifier(darkModeOn ? darkTheme : lightTheme);
+          },
+        ),
+      ],
+      builder: (context, child) {
+        return const Myapp();
+      },
+    ));
+  });
 }
 
 class Myapp extends StatefulWidget {
@@ -23,71 +41,14 @@ class Myapp extends StatefulWidget {
 class _MyappState extends State<Myapp> {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    return MaterialApp(
+      theme: themeNotifier.getTheme(),
       debugShowCheckedModeBanner: false,
       // initialRoute: Routes.splashScreen,
       // initialRoute: Routes.allScreenBottom,
-      initialRoute: Routes.signupScreen,
+      initialRoute: Routes.allScreenBottom,
       onGenerateRoute: PageRouter.generateRoutes,
     );
   }
 }
-
-/*
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Application(),
-    );
-  }
-}
-
-class Application extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _Application();
-}
-
-class _Application extends State<Application> {
-  // It is assumed that all messages contain a data field with the key 'type'
-  Future<void> setupInteractedMessage() async {
-    // Get any messages which caused the application to open from
-    // a terminated state.
-    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
-
-    // If the message also contains a data property with a "type" of "chat",
-    // navigate to a chat screen
-    if (initialMessage != null) {
-      _handleMessage(initialMessage);
-    }
-
-    // Also handle any interaction when the app is in the background via a
-    // Stream listener
-    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
-  }
-
-  void _handleMessage(RemoteMessage message) {
-    if (message.data['type'] == 'chat') {
-      print('*********************');
-      */ /*Navigator.pushNamed(context, '/chat',
-        arguments: ChatArguments(message),
-      );*/ /*
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Run code required to handle interacted messages in an async function
-    // as initState() must not be async
-    setupInteractedMessage();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Text("...");
-  }
-}*/

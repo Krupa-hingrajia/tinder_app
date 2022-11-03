@@ -1,9 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tinder_app_new/core/constant/color_constant.dart';
 import 'package:tinder_app_new/core/constant/image_constant.dart';
 import 'package:tinder_app_new/core/constant/text_style_constant.dart';
 import 'package:tinder_app_new/core/view_model/base_view.dart';
 import 'package:tinder_app_new/core/view_model/screens_view_model/setting_screen_view_model.dart';
+
+import '../../core/provider/theme_changer.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -14,9 +19,18 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen> {
   SettingScreenViewModel? model;
+  bool valueTheme = true;
 
   @override
   Widget build(BuildContext context) {
+    Future<void> onThemeChanged(bool value, ThemeNotifier themeNotifier) async {
+      (value) ? themeNotifier.setTheme(darkTheme) : themeNotifier.setTheme(lightTheme);
+      var prefs = await SharedPreferences.getInstance();
+      prefs.setBool('darkMode', value);
+    }
+
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+
     return BaseView<SettingScreenViewModel>(builder: (buildContext, model, child) {
       return Scaffold(
         appBar: AppBar(
@@ -50,10 +64,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      iconBtn(
-                          child: Icon(Icons.settings, color: ColorConstant.grey600),
-                          text: 'SETTING',
-                          color: ColorConstant.white),
+                      iconBtn(child: Icon(Icons.settings, color: ColorConstant.grey600), text: 'SETTING', color: ColorConstant.white),
                       Container(
                         padding: const EdgeInsets.only(top: 67),
                         child: Column(
@@ -71,6 +82,15 @@ class _SettingScreenState extends State<SettingScreen> {
                           child: Icon(Icons.edit_note_outlined, color: ColorConstant.grey600, size: 25),
                           text: 'EDIT INFO',
                           color: ColorConstant.white),
+                      GestureDetector(
+                          onTap: () {},
+                          child: CupertinoSwitch(
+                              value: valueTheme,
+                              onChanged: (bool? value) {
+                                valueTheme = value!;
+                                setState(() {});
+                                onThemeChanged(value, themeNotifier);
+                              }))
                     ],
                   ),
                 ],
@@ -106,8 +126,7 @@ class CurvePainter extends CustomPainter {
   }
 }
 
-Widget iconBtn(
-    {required Widget child, required String text, required Color color, double? minRadius, double? maxRadius}) {
+Widget iconBtn({required Widget child, required String text, required Color color, double? minRadius, double? maxRadius}) {
   return Column(
     children: [
       CircleAvatar(
