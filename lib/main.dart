@@ -20,7 +20,7 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider<ThemeNotifier>(
           create: (context) {
-            return ThemeNotifier(darkModeOn ? darkTheme : lightTheme);
+            return ThemeNotifier(darkModeOn ? lightTheme : lightTheme);
           },
         ),
       ],
@@ -45,8 +45,8 @@ class _MyappState extends State<Myapp> {
     return MaterialApp(
       theme: themeNotifier.getTheme(),
       debugShowCheckedModeBanner: false,
-      // initialRoute: Routes.splashScreen,
-      // initialRoute: Routes.allScreenBottom,
+      // initialRoute: Routes.homeScreen,
+      // initialRoute: Routes.signupScreen,
       initialRoute: Routes.allScreenBottom,
       onGenerateRoute: PageRouter.generateRoutes,
     );

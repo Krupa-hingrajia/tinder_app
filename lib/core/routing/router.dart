@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tinder_app_new/core/model/profile_model.dart';
 import 'package:tinder_app_new/core/routing/routes.dart';
 import 'package:tinder_app_new/ui/screens/all_screen_bottom.dart';
+import 'package:tinder_app_new/ui/screens/home_screen.dart';
 import 'package:tinder_app_new/ui/screens/login_screen.dart';
 import 'package:tinder_app_new/ui/screens/profile_screen.dart';
 import 'package:tinder_app_new/ui/screens/setting_screen.dart';
@@ -23,6 +24,8 @@ class PageRouter {
         return MaterialPageRoute(builder: (context) => const ProfileScreen());
         case Routes.settingScreen:
         return MaterialPageRoute(builder: (context) => const SettingScreen());
+        case Routes.homeScreen:
+        return MaterialPageRoute(builder: (context) => const HomeScreen());
       default:
         return MaterialPageRoute(
           builder: (context) => const Scaffold(

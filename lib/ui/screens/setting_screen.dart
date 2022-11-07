@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../core/provider/theme_changer.dart';
+import 'package:tinder_app_new/core/routing/routes.dart';
+import 'package:tinder_app_new/core/view_model/base_view.dart';
+import 'package:tinder_app_new/core/constant/color_constant.dart';
+import 'package:tinder_app_new/core/view_model/screens_view_model/setting_screen_view_model.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -13,39 +12,34 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
-  bool valueTheme = true;
+  SettingScreenViewModel? model;
 
   @override
   Widget build(BuildContext context) {
-    Future<void> onThemeChanged(bool value, ThemeNotifier themeNotifier) async {
-      (value) ? themeNotifier.setTheme(darkTheme) : themeNotifier.setTheme(lightTheme);
-      var prefs = await SharedPreferences.getInstance();
-      prefs.setBool("darkMode", value);
-    }
-
-    final themeNotifier = Provider.of<ThemeNotifier>(context);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('SETTING'),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10),
-        child: Row(
-          children: [
-            const Text('Theme'),
-            const Spacer(),
-            CupertinoSwitch(
-                value: valueTheme,
-                onChanged: (bool? value) {
-                  valueTheme = value!;
-                  setState(() {});
-                  onThemeChanged(value, themeNotifier);
-                })
-          ],
-        ),
-      ),
+    return BaseView<SettingScreenViewModel>(
+      builder: (buildContext, model, child) {
+        return Scaffold(
+          appBar: AppBar(
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                colors: <Color>[ColorConstant.yellowLight, ColorConstant.greenLight],
+              )),
+            ),
+            backgroundColor: ColorConstant.yellowLight,
+            leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.arrow_back_outlined)),
+            title: const Text('SETTING'),
+            centerTitle: true,
+          ),
+        );
+      },
+      onModelReady: (model) {
+        this.model = model;
+      },
     );
   }
 }
