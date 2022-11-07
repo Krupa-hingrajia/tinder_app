@@ -11,36 +11,31 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final FirebaseFirestore _firebase = FirebaseFirestore.instance;
+  dynamic data;
 
-  readFeeds() {
-    var notesItemCollection = _firebase.collection('Users').where('isFavourite', isEqualTo: true).get();
-    notesItemCollection.then((value) {
-      value.docs.where((element) => element.get('isFavourite'));
-    });
-    print('______________${notesItemCollection}');
+  DocumentSnapshot? snapshot;
 
-    return notesItemCollection;
-  }
-
-/*  getFavUser() async {
-    final CollectionReference _mainCollection = _firebase.collection('Sales');
-    CollectionReference getUser = await firebase.collection('Users').where('isFavourite', isEqualTo: true).get();
-    print("**************____________************${getUser}");
-    return getUser.s;
+  /* void getData() async {
+    //use a Async-await function to get the data
+    final data = await FirebaseFirestore.instance.collection("Users").doc('BabL30OlN2bfQUnVXK2t').get(); //get the data
+    snapshot = data;
   }*/
 
   @override
   void initState() {
-    // TODO: implement initState
-    readFeeds();
     super.initState();
+    //getData();
   }
 
   @override
   Widget build(BuildContext context) {
+    // getData();
     return Scaffold(
       appBar: AppBar(title: const Text('Messages'), backgroundColor: ColorConstant.pinkAccent),
-      body: FutureBuilder(
+      body: const ListTile(
+        title: Text('snapshot!.get([]).toString()'), //ok no errors.
+      ),
+      /*  body: FutureBuilder(
           future: readFeeds(),
           builder: (BuildContext context, snapshot) {
             return ListView.builder(
@@ -48,7 +43,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 itemBuilder: (BuildContext context, int index) {
                   return Text('data');
                 });
-          }),
+          }),*/
     );
   }
 }

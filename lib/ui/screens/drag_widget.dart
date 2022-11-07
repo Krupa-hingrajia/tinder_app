@@ -43,10 +43,7 @@ class _DragWidgetState extends State<DragWidget> {
                     : const AlwaysStoppedAnimation(0),
                 child: Stack(
                   children: [
-                    ProfileCard(
-                        profile: widget.profile,
-                        onPressedLike: widget.onPressedLike,
-                        onPressedCancel: widget.onPressedCancel),
+                    ProfileCard(profile: widget.profile, onPressedLike: widget.onPressedLike, onPressedCancel: widget.onPressedCancel),
                     widget.swipeNotifier.value != Swipe.none
                         ? widget.swipeNotifier.value == Swipe.right
                             ? Positioned(
@@ -79,12 +76,10 @@ class _DragWidgetState extends State<DragWidget> {
           ),
         ),
         onDragUpdate: (DragUpdateDetails dragUpdateDetails) {
-          if (dragUpdateDetails.delta.dx > 0 &&
-              dragUpdateDetails.globalPosition.dx > MediaQuery.of(context).size.width / 2) {
+          if (dragUpdateDetails.delta.dx > 0 && dragUpdateDetails.globalPosition.dx > MediaQuery.of(context).size.width / 2) {
             widget.swipeNotifier.value = Swipe.right;
           }
-          if (dragUpdateDetails.delta.dx < 0 &&
-              dragUpdateDetails.globalPosition.dx < MediaQuery.of(context).size.width / 2) {
+          if (dragUpdateDetails.delta.dx < 0 && dragUpdateDetails.globalPosition.dx < MediaQuery.of(context).size.width / 2) {
             widget.swipeNotifier.value = Swipe.left;
           }
         },
@@ -102,10 +97,7 @@ class _DragWidgetState extends State<DragWidget> {
             builder: (BuildContext context, Swipe swipe, Widget? child) {
               return Stack(
                 children: [
-                  ProfileCard(
-                      profile: widget.profile,
-                      onPressedLike: widget.onPressedLike,
-                      onPressedCancel: widget.onPressedCancel),
+                  ProfileCard(profile: widget.profile, onPressedLike: widget.onPressedLike, onPressedCancel: widget.onPressedCancel),
                   // heck if this is the last card and Swipe is not equal to Swipe.none
                   swipe != Swipe.none && widget.isLastCard
                       ? swipe == Swipe.right
@@ -222,22 +214,17 @@ class ProfileCard extends StatelessWidget {
                         ),
                         child: Padding(
                             padding: const EdgeInsets.only(left: 20),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    profile.userName,
-                                    style: const TextStyle(
-                                      fontFamily: 'Nunito',
-                                      fontWeight: FontWeight.w800,
-                                      fontSize: 21,
-                                    ),
-                                  ),
-                                  Text(profile.gender,
-                                      style: const TextStyle(
-                                          fontFamily: 'Nunito', fontWeight: FontWeight.w600, fontSize: 14))
-                                ]))))
+                            child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center, children: [
+                              Text(
+                                profile.userName,
+                                style: const TextStyle(
+                                  fontFamily: 'Nunito',
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 21,
+                                ),
+                              ),
+                              Text(profile.gender, style: const TextStyle(fontFamily: 'Nunito', fontWeight: FontWeight.w600, fontSize: 14))
+                            ]))))
               ])),
           SizedBox(height: MediaQuery.of(context).size.height * 0.01),
           Row(
