@@ -247,7 +247,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   /// Get from gallery.
   _getFromGallery() async {
-    final XFile? pickImage = await imagePicker.pickImage(source: ImageSource.gallery);
+    final XFile? pickImage = await imagePicker.pickImage(source: ImageSource.gallery, imageQuality: 10);
     imageFile = (File(pickImage!.path));
     String fileName = imageFile!.path.split('image_picker')[1];
     print('image Url $fileName');
@@ -262,7 +262,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   /// Get from Camera.
   _getFromCamera() async {
-    final XFile? pickImage = await imagePicker.pickImage(source: ImageSource.camera);
+    final XFile? pickImage = await imagePicker.pickImage(source: ImageSource.camera, imageQuality: 10);
     imageFile = (File(pickImage!.path));
     String fileName = imageFile!.path.split('image_picker')[1];
     print('image Url $fileName');
