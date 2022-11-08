@@ -50,13 +50,22 @@ class AllScreenBottomState extends State<AllScreenBottom> {
           iconSize: 32,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-                icon: Icon(model!.selectedIndex == 0 ? Icons.home : Icons.home_outlined, color: Colors.black),
+                icon: Padding(
+                  padding: const EdgeInsets.only(top: 6.0),
+                  child: Icon(model!.selectedIndex == 0 ? Icons.home : Icons.home_outlined, color: Colors.black),
+                ),
                 label: ''),
             BottomNavigationBarItem(
-                icon: Icon(model!.selectedIndex == 1 ? Icons.chat : Icons.chat_outlined, color: Colors.black),
+                icon: Padding(
+                  padding: const EdgeInsets.only(top: 6.0),
+                  child: Icon(model!.selectedIndex == 1 ? Icons.chat : Icons.chat_outlined, color: Colors.black),
+                ),
                 label: ''),
             BottomNavigationBarItem(
-                icon: Icon(model!.selectedIndex == 2 ? Icons.person : Icons.person_outline, color: Colors.black),
+                icon: Padding(
+                  padding: const EdgeInsets.only(top: 6.0),
+                  child: Icon(model!.selectedIndex == 2 ? Icons.person : Icons.person_outline, color: Colors.black),
+                ),
                 label: ''),
           ],
         ));

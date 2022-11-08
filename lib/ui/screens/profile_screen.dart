@@ -8,9 +8,9 @@ import 'package:tinder_app_new/core/view_model/screens_view_model/profile_screen
 import 'package:tinder_app_new/ui/screens/setting_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  UserArguments? userArguments;
+  // UserArguments? userArguments;
 
-  ProfileScreen({Key? key, this.userArguments}) : super(key: key);
+  const ProfileScreen({Key? key, /*this.userArguments*/}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -47,9 +47,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         minRadius: MediaQuery.of(context).size.width * 0.08,
                       ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-                Text("${model.name.toString()} ,${model.gender.toString()}", style: TextStyleConstant.settingNameStyle),
+                Text("${model.name}, ${model.gender}", style: TextStyleConstant.settingNameStyle),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.009),
-                Text(model.email.toString(), style: TextStyleConstant.settingEmailStyle),
+                Text("${model.email}", style: TextStyleConstant.settingEmailStyle),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -85,10 +85,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }, onModelReady: (model) {
       this.model = model;
       model.getDate();
-      model.email = widget.userArguments?.email.toString();
-      model.name = widget.userArguments?.name.toString();
-      model.gender = widget.userArguments?.gender.toString();
-      model.image = widget.userArguments?.imageURL.toString();
       model.updateUI();
     });
   }

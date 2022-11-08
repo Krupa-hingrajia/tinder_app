@@ -21,10 +21,10 @@ class PageRouter {
       case Routes.allScreenBottom:
         return MaterialPageRoute(builder: (context) => const AllScreenBottom());
       case Routes.profileScreen:
-        UserArguments screenArguments = settings.arguments as UserArguments;
+        // UserArguments screenArguments = settings.arguments as UserArguments;
         return MaterialPageRoute(
-            builder: (context) => ProfileScreen(
-                  userArguments: screenArguments,
+            builder: (context) => const ProfileScreen(
+                /*userArguments: screenArguments,*/
                 ));
       case Routes.settingScreen:
         return MaterialPageRoute(builder: (context) => const SettingScreen());

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tinder_app_new/core/provider/theme_changer.dart';
+import 'package:tinder_app_new/core/routing/routes.dart';
 import 'package:tinder_app_new/core/view_model/base_view.dart';
 import 'package:tinder_app_new/core/constant/color_constant.dart';
 import 'package:tinder_app_new/core/view_model/screens_view_model/setting_screen_view_model.dart';
@@ -63,7 +64,15 @@ class _SettingScreenState extends State<SettingScreen> {
                   ],
                 ),
                 const SizedBox(height: 12),
-                const Divider()
+                const Divider(),
+                const Spacer(),
+                const Divider(),
+                IconButton(
+                    onPressed: () {
+                      /// LOG.OUT
+                      Navigator.pushNamed(context, Routes.loginScreen);
+                }, icon: const Icon(Icons.logout, size: 28,)),
+                const SizedBox(height: 10),
               ],
             ),
           ),

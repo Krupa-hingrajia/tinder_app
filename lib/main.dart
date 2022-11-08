@@ -1,4 +1,4 @@
-/*import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,13 +46,14 @@ class _MyappState extends State<Myapp> {
       theme: themeNotifier.getTheme(),
       debugShowCheckedModeBanner: false,
       // initialRoute: Routes.loginScreen,
-      // initialRoute: Routes.signupScreen,
-      initialRoute: Routes.allScreenBottom,
+      initialRoute: Routes.signupScreen,
+      // initialRoute: Routes.allScreenBottom,
       onGenerateRoute: PageRouter.generateRoutes,
     );
   }
-}*/
+}
 
+/*
 import 'dart:convert';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -110,12 +111,12 @@ class _HomePageState extends State<HomePage> {
   void registerNotification() async {
     await Firebase.initializeApp();
     _messaging = FirebaseMessaging.instance;
-/*    _messaging.getToken().then((token) {
+     _messaging.getToken().then((token) {
       setState(() {
         mtoken = token;
         print('*********** TOKEN  ********* ${mtoken}');
       });
-    });*/
+    });
 
   // sendPushMessage();
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -142,7 +143,7 @@ class _HomePageState extends State<HomePage> {
         );
 
         // Parse the message received
-        /*      PushNotification notification = PushNotification(
+               PushNotification notification = PushNotification(
           title: message.notification?.title,
           body: message.notification?.body,
           dataTitle: message.data['title'],
@@ -163,7 +164,7 @@ class _HomePageState extends State<HomePage> {
             background: Colors.cyan.shade700,
             duration: Duration(seconds: 20),
           );
-        }*/
+        }
       });
     } else {
       print('User declined or has not accepted permission');
@@ -171,7 +172,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   // For handling notification when the app is in terminated state
-/*  checkForInitialMessage() async {
+   checkForInitialMessage() async {
     await Firebase.initializeApp();
     RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
 
@@ -188,7 +189,7 @@ class _HomePageState extends State<HomePage> {
         _totalNotifications++;
       });
     }
-  }*/
+  }
 
   @override
   void initState() {
@@ -217,7 +218,8 @@ class _HomePageState extends State<HomePage> {
 
     super.initState();
   }
-
+*/
+/*
   String constructFCMPayload(String? token) {
     //  _messageCount++;
     return jsonEncode({
@@ -228,7 +230,7 @@ class _HomePageState extends State<HomePage> {
           "body": "Hii"
         }
       }
-  /*    'token': token,
+       'token': token,
       'data': {
         'via': 'FlutterFire Cloud Messaging!!!',
         'count': 1,
@@ -236,9 +238,11 @@ class _HomePageState extends State<HomePage> {
       'notification': {
         'title': 'Hello FlutterFire!',
         'body': 'This notification (1) was created via FCM!',
-      },*/
+      },
     });
-  }
+  }*/
+/*
+
 
   Future<void> sendPushMessage() async {
     print('*********___________::: {$mtoken}');
@@ -276,7 +280,7 @@ class _HomePageState extends State<HomePage> {
       else {
         print(response.reasonPhrase);
       }
- /*     await http.post(
+       await http.post(
         Uri.parse('https://fcm.googleapis.com/fcm/send'),
         headers: <String, String>{
           'Content-Length' : '<calculated when request is sent>',
@@ -293,7 +297,7 @@ class _HomePageState extends State<HomePage> {
           }
         },
       );
-      print('FCM request for device sent!');*/
+      print('FCM request for device sent!');
     } catch (e) {
       print(e);
     }
@@ -385,3 +389,4 @@ class NotificationBadge extends StatelessWidget {
     );
   }
 }
+*/
