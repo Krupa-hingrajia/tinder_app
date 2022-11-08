@@ -6,7 +6,6 @@ import 'package:tinder_app_new/ui/widget/custom_text_field.dart';
 import 'package:tinder_app_new/core/constant/image_constant.dart';
 import 'package:tinder_app_new/core/constant/text_style_constant.dart';
 
-import '../../core/constant/color_constant.dart';
 import '../../core/view_model/screens_view_model/login_screen_view_model.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -77,7 +76,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   onTap: () async {
                                     ///// SIGN UP SCREEN.
                                     Navigator.pushNamed(context, Routes.signupScreen);
-
                                     model.emailController.clear();
                                     model.passwordController.clear();
                                     setState(() {});
@@ -94,6 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 model.loginCircular = false;
                                 setState(() {});
                                 model.signInUser(context: context);
+                                model.getUserDetail();
                                 model.loginCircular = true;
                                 setState(() {});
                               }
@@ -103,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       onModelReady: (model) async {
         this.model = model;
-        // await model.signInUser(context: context);
+        model.getUserDetail();
       },
     );
   }

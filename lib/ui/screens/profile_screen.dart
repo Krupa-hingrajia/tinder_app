@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:tinder_app_new/core/constant/color_constant.dart';
 import 'package:tinder_app_new/core/constant/image_constant.dart';
 import 'package:tinder_app_new/core/constant/text_style_constant.dart';
-import 'package:tinder_app_new/core/routing/routes.dart';
+import 'package:tinder_app_new/core/model/profile_model.dart';
 import 'package:tinder_app_new/core/view_model/base_view.dart';
 import 'package:tinder_app_new/core/view_model/screens_view_model/profile_screen_view_model.dart';
 import 'package:tinder_app_new/ui/screens/setting_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  UserArguments? userArguments;
+
+  ProfileScreen({Key? key, this.userArguments}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -84,6 +85,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }, onModelReady: (model) {
       this.model = model;
       model.getDate();
+      model.email = widget.userArguments?.email.toString();
+      model.name = widget.userArguments?.name.toString();
+      model.gender = widget.userArguments?.gender.toString();
+      model.image = widget.userArguments?.imageURL.toString();
+      model.updateUI();
     });
   }
 }
@@ -118,12 +124,8 @@ Widget iconBtn(
         height: minRadius ?? 52,
         width: maxRadius ?? 52,
         decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: LinearGradient(
-            colors: <Color>[ColorConstant.orange, ColorConstant.yellowLight],
-          ),
-        ),
-        // backgroundColor: color,
+            shape: BoxShape.circle,
+            gradient: LinearGradient(colors: <Color>[ColorConstant.orange, ColorConstant.yellowLight])),
         child: child,
       ),
       const SizedBox(height: 5),

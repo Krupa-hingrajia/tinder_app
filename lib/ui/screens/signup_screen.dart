@@ -77,8 +77,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 Positioned(
                                     right: MediaQuery.of(context).size.shortestSide * 0,
                                     height: MediaQuery.of(context).size.height * 0.044,
-                                    bottom: MediaQuery.of(context).size.height * 0.017,
-                                    child: Image.asset(ImageConstant.addUser)),
+                                    bottom: MediaQuery.of(context).size.height * 0.013,
+                                    child: Container()),
                               ],
                             )
                           : Stack(
@@ -226,14 +226,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   _getFromCamera();
                   Navigator.pop(context);
                 },
-                child: const Text('Upload from camera'),
+                child: const Text('Upload from camera', style: TextStyle(color: Colors.blue)),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
                   _getFromGallery();
                   Navigator.pop(context);
                 },
-                child: const Text('Upload from gallery'),
+                child: const Text('Upload from gallery', style: TextStyle(color: Colors.blue)),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {

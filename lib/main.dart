@@ -16,18 +16,16 @@ Future<void> main() async {
   SharedPreferences.getInstance().then((prefs) {
     var darkModeOn = prefs.getBool("darkMode") ?? true;
 
-    runApp(MultiProvider(
-      providers: [
-        ChangeNotifierProvider<ThemeNotifier>(
-          create: (context) {
-            return ThemeNotifier(darkModeOn ? lightTheme : lightTheme);
-          },
-        ),
-      ],
-      builder: (context, child) {
-        return const Myapp();
-      },
-    ));
+    runApp(
+      ChangeNotifierProvider<ThemeNotifier>(
+        create: (context) {
+          return ThemeNotifier(darkModeOn ? darkTheme : lightTheme);
+        },
+        builder: (context, child) {
+          return const Myapp();
+        },
+      ),
+    );
   });
 }
 
@@ -45,7 +43,7 @@ class _MyappState extends State<Myapp> {
     return MaterialApp(
       theme: themeNotifier.getTheme(),
       debugShowCheckedModeBanner: false,
-      // initialRoute: Routes.homeScreen,
+      // initialRoute: Routes.loginScreen,
       // initialRoute: Routes.signupScreen,
       initialRoute: Routes.allScreenBottom,
       onGenerateRoute: PageRouter.generateRoutes,

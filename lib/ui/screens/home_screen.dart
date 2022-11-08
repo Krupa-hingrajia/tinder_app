@@ -20,7 +20,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return BaseView<HomeScreenViewModel>(builder: (buildContext, model, child) {
       return Scaffold(
-        backgroundColor: Colors.white,
         body: Stack(
           children: const [
             BackGroundCurveWidget(),

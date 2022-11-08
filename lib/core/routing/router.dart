@@ -16,15 +16,19 @@ class PageRouter {
         return MaterialPageRoute(builder: (context) => const SplashScreen());
       case Routes.loginScreen:
         return MaterialPageRoute(builder: (context) => const LoginScreen());
-        case Routes.signupScreen:
+      case Routes.signupScreen:
         return MaterialPageRoute(builder: (context) => const SignUpScreen());
-        case Routes.allScreenBottom:
+      case Routes.allScreenBottom:
         return MaterialPageRoute(builder: (context) => const AllScreenBottom());
-        case Routes.profileScreen:
-        return MaterialPageRoute(builder: (context) => const ProfileScreen());
-        case Routes.settingScreen:
+      case Routes.profileScreen:
+        UserArguments screenArguments = settings.arguments as UserArguments;
+        return MaterialPageRoute(
+            builder: (context) => ProfileScreen(
+                  userArguments: screenArguments,
+                ));
+      case Routes.settingScreen:
         return MaterialPageRoute(builder: (context) => const SettingScreen());
-        case Routes.homeScreen:
+      case Routes.homeScreen:
         return MaterialPageRoute(builder: (context) => const HomeScreen());
       default:
         return MaterialPageRoute(

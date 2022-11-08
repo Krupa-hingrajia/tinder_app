@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 
 final darkTheme = ThemeData(
+  appBarTheme: const AppBarTheme(
+      shadowColor: Colors.white,
+      titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
+      iconTheme: IconThemeData(color: Colors.black)),
   primarySwatch: Colors.grey,
   primaryColor: Colors.black,
   brightness: Brightness.dark,
   backgroundColor: const Color(0xFF212121),
   accentColor: Colors.white,
   accentIconTheme: const IconThemeData(color: Colors.black),
-  dividerColor: Colors.black12,
+  dividerColor: Colors.white,
 );
 
 final lightTheme = ThemeData(
@@ -17,18 +21,18 @@ final lightTheme = ThemeData(
   backgroundColor: const Color(0xFFE5E5E5),
   accentColor: Colors.black,
   accentIconTheme: const IconThemeData(color: Colors.white),
-  dividerColor: Colors.white54,
+  dividerColor: Colors.black,
 );
 
 class ThemeNotifier with ChangeNotifier {
-  ThemeData? themeData;
+  ThemeData _themeData;
 
-  ThemeNotifier(this.themeData);
+  ThemeNotifier(this._themeData);
 
-  getTheme() => themeData;
+  getTheme() => _themeData;
 
   setTheme(ThemeData themeData) async {
-    themeData = themeData;
+    _themeData = themeData;
     notifyListeners();
   }
 }
