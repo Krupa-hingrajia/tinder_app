@@ -1,5 +1,6 @@
-/*import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,17 +43,20 @@ class _MyappState extends State<Myapp> {
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
-    return MaterialApp(
-      theme: themeNotifier.getTheme(),
-      debugShowCheckedModeBanner: false,
-      // initialRoute: Routes.loginScreen,
-      // initialRoute: Routes.signupScreen,
-      initialRoute: Routes.allScreenBottom,
-      onGenerateRoute: PageRouter.generateRoutes,
+    return OverlaySupport(
+      child: MaterialApp(
+        theme: themeNotifier.getTheme(),
+        debugShowCheckedModeBanner: false,
+        // initialRoute: Routes.loginScreen,
+        // initialRoute: Routes.signupScreen,
+        initialRoute: Routes.allScreenBottom,
+        onGenerateRoute: PageRouter.generateRoutes,
+      ),
     );
   }
-}*/
+}
 
+/*
 import 'dart:convert';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -60,6 +64,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:overlay_support/overlay_support.dart';
+import 'package:tinder_app_new/core/constant/color_constant.dart';
 import 'package:tinder_app_new/ui/screens/chat_screen.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -96,7 +101,8 @@ class _HomePageState extends State<HomePage> {
   late int _totalNotifications;
   PushNotification? _notificationInfo;
 
-  String? mtoken = "f_JCPQ6ERkubBn8tbN7qIL:APA91bEvcUfmu7FoHfj6BjBfmd2d3P39pEfjq3q7jU8n0cC3tdLLT89JvGio4fhMZc-_Lv5lHZiKfELSAvM-9bDUFHK3c3jbuBZx5tIo_Ydz5FWrhoB3umYMRKD2oPxc0lUYXKAQVjBf";
+  String? mtoken =
+      "f_JCPQ6ERkubBn8tbN7qIL:APA91bEvcUfmu7FoHfj6BjBfmd2d3P39pEfjq3q7jU8n0cC3tdLLT89JvGio4fhMZc-_Lv5lHZiKfELSAvM-9bDUFHK3c3jbuBZx5tIo_Ydz5FWrhoB3umYMRKD2oPxc0lUYXKAQVjBf";
 
   void getToken() async {
     await FirebaseMessaging.instance.getToken().then((token) {
@@ -110,14 +116,8 @@ class _HomePageState extends State<HomePage> {
   void registerNotification() async {
     await Firebase.initializeApp();
     _messaging = FirebaseMessaging.instance;
-/*    _messaging.getToken().then((token) {
-      setState(() {
-        mtoken = token;
-        print('*********** TOKEN  ********* ${mtoken}');
-      });
-    });*/
 
-  // sendPushMessage();
+    // sendPushMessage();
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     NotificationSettings settings = await _messaging.requestPermission(
@@ -134,15 +134,15 @@ class _HomePageState extends State<HomePage> {
         print('Message title: ${message.notification?.title}, body: ${message.notification?.body}, data: ${message.data}');
 
         showSimpleNotification(
-          Text(message.notification!.title.toString()),
-          //   leading: NotificationBadge(totalNotifications: _totalNotifications),
-          subtitle: Text(message.notification!.body.toString()),
-          background: Colors.cyan.shade700,
+          Text(message.notification!.title.toString(), style: TextStyle(color: Colors.black)),
+          leading: const NotificationBadge(),
+          subtitle: Text(message.notification!.body.toString(), style: TextStyle(color: Colors.black)),
+          background: ColorConstant.yellowLight,
           duration: Duration(seconds: 10),
         );
 
         // Parse the message received
-        /*      PushNotification notification = PushNotification(
+        PushNotification notification = PushNotification(
           title: message.notification?.title,
           body: message.notification?.body,
           dataTitle: message.data['title'],
@@ -163,7 +163,7 @@ class _HomePageState extends State<HomePage> {
             background: Colors.cyan.shade700,
             duration: Duration(seconds: 20),
           );
-        }*/
+        }
       });
     } else {
       print('User declined or has not accepted permission');
@@ -171,7 +171,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   // For handling notification when the app is in terminated state
-/*  checkForInitialMessage() async {
+  checkForInitialMessage() async {
     await Firebase.initializeApp();
     RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
 
@@ -188,12 +188,12 @@ class _HomePageState extends State<HomePage> {
         _totalNotifications++;
       });
     }
-  }*/
+  }
 
   @override
   void initState() {
     // _totalNotifications = 0;
-     // getToken();
+    // getToken();
     registerNotification();
     // sendPushMessage();
     // checkForInitialMessage();
@@ -218,28 +218,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  String constructFCMPayload(String? token) {
-    //  _messageCount++;
-    return jsonEncode({
-      {
-        "to": token,
-        "notification": {
-          "title": "You Got Friend Request From Dhruval",
-          "body": "Hii"
-        }
-      }
-  /*    'token': token,
-      'data': {
-        'via': 'FlutterFire Cloud Messaging!!!',
-        'count': 1,
-      },
-      'notification': {
-        'title': 'Hello FlutterFire!',
-        'body': 'This notification (1) was created via FCM!',
-      },*/
-    });
-  }
-
   Future<void> sendPushMessage() async {
     print('*********___________::: {$mtoken}');
     if (mtoken == null) {
@@ -249,20 +227,16 @@ class _HomePageState extends State<HomePage> {
 
     try {
       var headers = {
-        'Authorization': 'key=AAAA0FDqNaQ:APA91bEaEPf-lW6D4W3pXPyaI1QJKWHhYUrCHK0riCvOPvVN_LTmrrEjcLNUtHbWVuRfdBeRksSh8mY8Bxzr3IEBKLx6TovbQQzEnJG6tNKf6JjmAl10sLuW64u1C2dgPNiXa3i6Re9I',
+        'Authorization':
+            'key=AAAA0FDqNaQ:APA91bEaEPf-lW6D4W3pXPyaI1QJKWHhYUrCHK0riCvOPvVN_LTmrrEjcLNUtHbWVuRfdBeRksSh8mY8Bxzr3IEBKLx6TovbQQzEnJG6tNKf6JjmAl10sLuW64u1C2dgPNiXa3i6Re9I',
         'Content-Type': 'application/json'
       };
       var request = http.Request('POST', Uri.parse('https://fcm.googleapis.com/fcm/send'));
       request.body = json.encode({
-        "to": "f_JCPQ6ERkubBn8tbN7qIL:APA91bEvcUfmu7FoHfj6BjBfmd2d3P39pEfjq3q7jU8n0cC3tdLLT89JvGio4fhMZc-_Lv5lHZiKfELSAvM-9bDUFHK3c3jbuBZx5tIo_Ydz5FWrhoB3umYMRKD2oPxc0lUYXKAQVjBf",
-        "data": {
-          "via": "FlutterFire Cloud Messaging!!!",
-          "count": 1
-        },
-        "notification": {
-          "title": "Hello FlutterFire",
-          "body": "1"
-        }
+        "to":
+            "f_JCPQ6ERkubBn8tbN7qIL:APA91bEvcUfmu7FoHfj6BjBfmd2d3P39pEfjq3q7jU8n0cC3tdLLT89JvGio4fhMZc-_Lv5lHZiKfELSAvM-9bDUFHK3c3jbuBZx5tIo_Ydz5FWrhoB3umYMRKD2oPxc0lUYXKAQVjBf",
+        "data": {"via": "FlutterFire Cloud Messaging!!!", "count": 1},
+        "notification": {"title": "Hello FlutterFire", "body": "1"}
       });
       request.headers.addAll(headers);
 
@@ -272,28 +246,25 @@ class _HomePageState extends State<HomePage> {
 
       if (response.statusCode == 200) {
         print(await response.stream.bytesToString());
-      }
-      else {
+      } else {
         print(response.reasonPhrase);
       }
- /*     await http.post(
+      await http.post(
         Uri.parse('https://fcm.googleapis.com/fcm/send'),
         headers: <String, String>{
-          'Content-Length' : '<calculated when request is sent>',
-          'Host' : '<calculated when request is sent>',
+          'Content-Length': '<calculated when request is sent>',
+          'Host': '<calculated when request is sent>',
           'Content-Type': 'application/json',
           "Authorization":
               "key=AAAA0FDqNaQ:APA91bEaEPf-lW6D4W3pXPyaI1QJKWHhYUrCHK0riCvOPvVN_LTmrrEjcLNUtHbWVuRfdBeRksSh8mY8Bxzr3IEBKLx6TovbQQzEnJG6tNKf6JjmAl10sLuW64u1C2dgPNiXa3i6Re9I"
         },
         body: {
-          "to": "f_JCPQ6ERkubBn8tbN7qIL:APA91bEvcUfmu7FoHfj6BjBfmd2d3P39pEfjq3q7jU8n0cC3tdLLT89JvGio4fhMZc-_Lv5lHZiKfELSAvM-9bDUFHK3c3jbuBZx5tIo_Ydz5FWrhoB3umYMRKD2oPxc0lUYXKAQVjBf",
-          "notification": {
-            "title": "You Got Friend Request From Dhruval",
-            "body": "Hii"
-          }
+          "to":
+              "f_JCPQ6ERkubBn8tbN7qIL:APA91bEvcUfmu7FoHfj6BjBfmd2d3P39pEfjq3q7jU8n0cC3tdLLT89JvGio4fhMZc-_Lv5lHZiKfELSAvM-9bDUFHK3c3jbuBZx5tIo_Ydz5FWrhoB3umYMRKD2oPxc0lUYXKAQVjBf",
+          "notification": {"title": "You Got Friend Request From Dhruval", "body": "Hii"}
         },
       );
-      print('FCM request for device sent!');*/
+      print('FCM request for device sent!');
     } catch (e) {
       print(e);
     }
@@ -360,28 +331,27 @@ class _HomePageState extends State<HomePage> {
 }
 
 class NotificationBadge extends StatelessWidget {
-  final int totalNotifications;
-
-  const NotificationBadge({required this.totalNotifications});
+  const NotificationBadge({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 40.0,
       height: 40.0,
-      decoration: new BoxDecoration(
-        color: Colors.red,
+      decoration: const BoxDecoration(
+        color: ColorConstant.greenLight,
         shape: BoxShape.circle,
       ),
-      child: Center(
+      child: const Center(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(8.0),
           child: Text(
-            '$totalNotifications',
-            style: TextStyle(color: Colors.white, fontSize: 20),
+            'T',
+            style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
       ),
     );
   }
 }
+*/
