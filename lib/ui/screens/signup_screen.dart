@@ -200,8 +200,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 : model.signupCircular = false;
                             setState(() {});
                           }
-                          model.signupCircular = true;
-                          setState(() {});
+                          /*model.signupCircular = true;
+                          setState(() {});*/
                         }
                       }),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.036),

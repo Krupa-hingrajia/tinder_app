@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tinder_app_new/core/model/cards_model.dart';
 import 'package:tinder_app_new/core/model/profile_model.dart';
 import 'package:tinder_app_new/core/routing/routes.dart';
@@ -15,6 +16,7 @@ class LoginScreenViewModel extends BaseModel {
   String? email;
   String? gender;
   String? imageURL;
+
   bool loginCircular = false;
 
   TextEditingController emailController = TextEditingController();
@@ -35,6 +37,12 @@ class LoginScreenViewModel extends BaseModel {
       print('GENDER :: $gender');
       print('IMAGE-URL  :: $imageURL');
     }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('name', name.toString());
+    prefs.setString('email', email.toString());
+    prefs.setString('gender', gender.toString());
+    prefs.setString('image', imageURL.toString());
+    updateUI();
   }
 
   signInUser({required BuildContext context}) async {
@@ -44,8 +52,7 @@ class LoginScreenViewModel extends BaseModel {
         password: passwordController.text,
       );
       // ignore: use_build_context_synchronously
-      Navigator.pushNamedAndRemoveUntil(context, Routes.settingScreen, (route) => false,
-          arguments: UserArguments(name: name, gender: gender, email: email, imageURL: imageURL));
+      Navigator.pushNamedAndRemoveUntil(context, Routes.allScreenBottom, (route) => false);
     } on FirebaseAuthException catch (e) {
       loginCircular = false;
       if (e.code == 'wrong-password') {
