@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
   late int _totalNotifications;
   PushNotification? _notificationInfo;
 
-  String? mtoken = " ";
+  String? mtoken = "f_JCPQ6ERkubBn8tbN7qIL:APA91bEvcUfmu7FoHfj6BjBfmd2d3P39pEfjq3q7jU8n0cC3tdLLT89JvGio4fhMZc-_Lv5lHZiKfELSAvM-9bDUFHK3c3jbuBZx5tIo_Ydz5FWrhoB3umYMRKD2oPxc0lUYXKAQVjBf";
 
   void getToken() async {
     await FirebaseMessaging.instance.getToken().then((token) {
@@ -110,14 +110,14 @@ class _HomePageState extends State<HomePage> {
   void registerNotification() async {
     await Firebase.initializeApp();
     _messaging = FirebaseMessaging.instance;
-    _messaging.getToken().then((token) {
+/*    _messaging.getToken().then((token) {
       setState(() {
         mtoken = token;
         print('*********** TOKEN  ********* ${mtoken}');
       });
-    });
+    });*/
 
-    sendPushMessage();
+  // sendPushMessage();
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     NotificationSettings settings = await _messaging.requestPermission(
@@ -134,11 +134,11 @@ class _HomePageState extends State<HomePage> {
         print('Message title: ${message.notification?.title}, body: ${message.notification?.body}, data: ${message.data}');
 
         showSimpleNotification(
-          Text('message.notification!.title.toString()'),
+          Text(message.notification!.title.toString()),
           //   leading: NotificationBadge(totalNotifications: _totalNotifications),
-          subtitle: Text('message.notification!.body.toString()'),
+          subtitle: Text(message.notification!.body.toString()),
           background: Colors.cyan.shade700,
-          duration: Duration(seconds: 20),
+          duration: Duration(seconds: 10),
         );
 
         // Parse the message received
@@ -193,7 +193,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     // _totalNotifications = 0;
-    //  getToken();
+     // getToken();
     registerNotification();
     // sendPushMessage();
     // checkForInitialMessage();
@@ -221,7 +221,14 @@ class _HomePageState extends State<HomePage> {
   String constructFCMPayload(String? token) {
     //  _messageCount++;
     return jsonEncode({
-      'token': token,
+      {
+        "to": token,
+        "notification": {
+          "title": "You Got Friend Request From Dhruval",
+          "body": "Hii"
+        }
+      }
+  /*    'token': token,
       'data': {
         'via': 'FlutterFire Cloud Messaging!!!',
         'count': 1,
@@ -229,7 +236,7 @@ class _HomePageState extends State<HomePage> {
       'notification': {
         'title': 'Hello FlutterFire!',
         'body': 'This notification (1) was created via FCM!',
-      },
+      },*/
     });
   }
 
@@ -241,16 +248,52 @@ class _HomePageState extends State<HomePage> {
     }
 
     try {
-      await http.post(
-        Uri.parse('https://api.rnfirebase.io/messaging/send'),
+      var headers = {
+        'Authorization': 'key=AAAA0FDqNaQ:APA91bEaEPf-lW6D4W3pXPyaI1QJKWHhYUrCHK0riCvOPvVN_LTmrrEjcLNUtHbWVuRfdBeRksSh8mY8Bxzr3IEBKLx6TovbQQzEnJG6tNKf6JjmAl10sLuW64u1C2dgPNiXa3i6Re9I',
+        'Content-Type': 'application/json'
+      };
+      var request = http.Request('POST', Uri.parse('https://fcm.googleapis.com/fcm/send'));
+      request.body = json.encode({
+        "to": "f_JCPQ6ERkubBn8tbN7qIL:APA91bEvcUfmu7FoHfj6BjBfmd2d3P39pEfjq3q7jU8n0cC3tdLLT89JvGio4fhMZc-_Lv5lHZiKfELSAvM-9bDUFHK3c3jbuBZx5tIo_Ydz5FWrhoB3umYMRKD2oPxc0lUYXKAQVjBf",
+        "data": {
+          "via": "FlutterFire Cloud Messaging!!!",
+          "count": 1
+        },
+        "notification": {
+          "title": "Hello FlutterFire",
+          "body": "1"
+        }
+      });
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+
+      print(response.toString());
+
+      if (response.statusCode == 200) {
+        print(await response.stream.bytesToString());
+      }
+      else {
+        print(response.reasonPhrase);
+      }
+ /*     await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
         headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
+          'Content-Length' : '<calculated when request is sent>',
+          'Host' : '<calculated when request is sent>',
+          'Content-Type': 'application/json',
           "Authorization":
               "key=AAAA0FDqNaQ:APA91bEaEPf-lW6D4W3pXPyaI1QJKWHhYUrCHK0riCvOPvVN_LTmrrEjcLNUtHbWVuRfdBeRksSh8mY8Bxzr3IEBKLx6TovbQQzEnJG6tNKf6JjmAl10sLuW64u1C2dgPNiXa3i6Re9I"
         },
-        body: constructFCMPayload(mtoken),
+        body: {
+          "to": "f_JCPQ6ERkubBn8tbN7qIL:APA91bEvcUfmu7FoHfj6BjBfmd2d3P39pEfjq3q7jU8n0cC3tdLLT89JvGio4fhMZc-_Lv5lHZiKfELSAvM-9bDUFHK3c3jbuBZx5tIo_Ydz5FWrhoB3umYMRKD2oPxc0lUYXKAQVjBf",
+          "notification": {
+            "title": "You Got Friend Request From Dhruval",
+            "body": "Hii"
+          }
+        },
       );
-      print('FCM request for device sent!');
+      print('FCM request for device sent!');*/
     } catch (e) {
       print(e);
     }
