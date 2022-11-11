@@ -189,7 +189,7 @@ class ProfileCard extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: Image.network(
-                      profile.imageURL,
+                      profile.imageURL.toString(),
                       fit: BoxFit.fitHeight,
                     ),
                   ),
@@ -216,14 +216,14 @@ class ProfileCard extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 20),
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center, children: [
                               Text(
-                                profile.userName,
+                                profile.userName.toString(),
                                 style: const TextStyle(
                                   fontFamily: 'Nunito',
                                   fontWeight: FontWeight.w800,
                                   fontSize: 21,
                                 ),
                               ),
-                              Text(profile.gender, style: const TextStyle(fontFamily: 'Nunito', fontWeight: FontWeight.w600, fontSize: 14))
+                              Text(profile.gender.toString(), style: const TextStyle(fontFamily: 'Nunito', fontWeight: FontWeight.w600, fontSize: 14))
                             ]))))
               ])),
           SizedBox(height: MediaQuery.of(context).size.height * 0.01),

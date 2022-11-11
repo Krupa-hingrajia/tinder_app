@@ -23,7 +23,7 @@ class CardsStackWidget extends StatefulWidget {
 class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerProviderStateMixin {
   FirebaseFirestore firebase = FirebaseFirestore.instance;
   late final FirebaseMessaging _messaging;
-  List<ProfilePicture> list = [];
+  List<ProfilePicture> profilePicture = [];
   ValueNotifier<Swipe> swipeNotifier = ValueNotifier(Swipe.none);
   late final AnimationController _animationController;
 
@@ -40,7 +40,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
     );
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        list.removeLast();
+        profilePicture.removeLast();
         _animationController.reset();
 
         swipeNotifier.value = Swipe.none;
@@ -55,7 +55,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
     for (int i = 0; i < data.docs.length; i++) {
       ProfilePicture model = ProfilePicture(data.docs[i].data()['image_url'], data.docs[i].data()['name'], data.docs[i].data()['gender'],
           data.docs[i].data()['id'], data.docs[i].data()['isFavourite']);
-      list.add(model);
+      profilePicture.add(model);
     }
   }
 
@@ -75,8 +75,8 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
                   builder: (context, swipe, _) => Stack(
                       clipBehavior: Clip.none,
                       alignment: Alignment.center,
-                      children: List.generate(list.length, (index) {
-                        if (index == list.length - 1) {
+                      children: List.generate(profilePicture.length, (index) {
+                        if (index == profilePicture.length - 1) {
                           return PositionedTransition(
                             rect: RelativeRectTween(
                               begin: RelativeRect.fromSize(const Rect.fromLTWH(0, 0, 580, 340), const Size(580, 340)),
@@ -110,15 +110,15 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
                                 ),
                               ),
                               child: DragWidget(
-                                profile: list[index],
+                                profile: profilePicture[index],
                                 index: index,
                                 swipeNotifier: swipeNotifier,
                                 isLastCard: true,
                                 onPressedLike: () {
-                                  sendPushMessage();
+                                  sendPushMessage(profilePicture[index].id.toString());
                                   swipeNotifier.value = Swipe.right;
                                   _animationController.forward();
-                                  addLike(list[index].id);
+                                  addLike(profilePicture[index].id.toString());
                                 },
                                 onPressedCancel: () {
                                   swipeNotifier.value = Swipe.left;
@@ -129,14 +129,14 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
                           );
                         } else {
                           return DragWidget(
-                            profile: list[index],
+                            profile: profilePicture[index],
                             index: index,
                             swipeNotifier: swipeNotifier,
                             onPressedLike: () {
-                              sendPushMessage();
+                              sendPushMessage(profilePicture[index].id.toString());
                               swipeNotifier.value = Swipe.right;
                               _animationController.forward();
-                              addLike(list[index].id);
+                              addLike(profilePicture[index].id.toString());
                             },
                             onPressedCancel: () {
                               swipeNotifier.value = Swipe.left;
@@ -162,7 +162,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
               return IgnorePointer(child: Container(height: 700.0, width: 80.0, color: Colors.transparent));
             },
             onAccept: (int index) {
-              list.removeAt(index);
+              profilePicture.removeAt(index);
             },
           ),
         ),
@@ -177,7 +177,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
               return IgnorePointer(child: Container(height: 700.0, width: 80.0, color: Colors.transparent));
             },
             onAccept: (int index) {
-              list.removeAt(index);
+              profilePicture.removeAt(index);
             },
           ),
         ),
@@ -210,9 +210,9 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
         print('Message title: ${message.notification?.title}, body: ${message.notification?.body}, data: ${message.data}');
 
         showSimpleNotification(
-          Text(message.notification!.title.toString(), style: TextStyle(color: Colors.black)),
+          Text(message.notification!.title.toString(), style: const TextStyle(color: Colors.black)),
           leading: const NotificationBadge(),
-          subtitle: Text(message.notification!.body.toString(), style: TextStyle(color: Colors.black)),
+          subtitle: Text(message.notification!.body.toString(), style: const TextStyle(color: Colors.black)),
           background: ColorConstant.yellowLight,
           duration: const Duration(seconds: 10),
         );
@@ -223,12 +223,17 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
   }
 
   //Send Notifications
-  Future<void> sendPushMessage() async {
-    /*  print('*********___________::: {$mtoken}');
-    if (mtoken == null) {
-      print('Unable to send FCM message, no token exists.');
-      return;
-    }*/
+  Future<void> sendPushMessage(String userId) async {
+    String userToken = '';
+    String userName = '';
+    final querySnapshot = await firebase.collection('Users').where('id', isEqualTo: userId).get();
+
+    querySnapshot.docs.forEach((element) {
+      userToken = element.get('useToken');
+      userName = element.get('name');
+    });
+
+    print('______________: $userToken');
 
     try {
       var headers = {
@@ -239,9 +244,9 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
       var request = http.Request('POST', Uri.parse('https://fcm.googleapis.com/fcm/send'));
       request.body = json.encode({
         "to":
-            "d2-qJJUBR06QtJFAAQwryH:APA91bFG7cyoZi04-QCxfUKXI32d9hJMzusuY6CVcdYptyDBaL8p7ERzOxHGYq47Fk0bwPlys_kLn5gG04Gu-ow3T3buZf0KLtMPiUQYR2Km8wvp6phUZvAALmjpW8QwHcek7hrUry",
+            "f_JCPQ6ERkubBn8tbN7qIL:APA91bEvcUfmu7FoHfj6BjBfmd2d3P39pEfjq3q7jU8n0cC3tdLLT89JvGio4fhMZc-_Lv5lHZiKfELSAvM-9bDUFHK3c3jbuBZx5tIo_Ydz5FWrhoB3umYMRKD2oPxc0lUYXKAQVjBf",
         "data": {"via": "FlutterFire Cloud Messaging!!!", "count": 1},
-        "notification": {"title": "Hello Bhagheshwarji", "body": "1"}
+        "notification": {"title": "You Got Friend Request From $userName", "body": userName}
       });
       request.headers.addAll(headers);
 
@@ -254,22 +259,6 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
       } else {
         print(response.reasonPhrase);
       }
-      /*     await http.post(
-        Uri.parse('https://fcm.googleapis.com/fcm/send'),
-        headers: <String, String>{
-          'Content-Length': '<calculated when request is sent>',
-          'Host': '<calculated when request is sent>',
-          'Content-Type': 'application/json',
-          "Authorization":
-              "key=AAAA0FDqNaQ:APA91bEaEPf-lW6D4W3pXPyaI1QJKWHhYUrCHK0riCvOPvVN_LTmrrEjcLNUtHbWVuRfdBeRksSh8mY8Bxzr3IEBKLx6TovbQQzEnJG6tNKf6JjmAl10sLuW64u1C2dgPNiXa3i6Re9I"
-        },
-        body: {
-          "to":
-              "f_JCPQ6ERkubBn8tbN7qIL:APA91bEvcUfmu7FoHfj6BjBfmd2d3P39pEfjq3q7jU8n0cC3tdLLT89JvGio4fhMZc-_Lv5lHZiKfELSAvM-9bDUFHK3c3jbuBZx5tIo_Ydz5FWrhoB3umYMRKD2oPxc0lUYXKAQVjBf",
-          "notification": {"title": "You Got Friend Request From Dhruval", "body": "Hii"}
-        },
-      );
-      print('FCM request for device sent!');*/
     } catch (e) {
       print(e);
     }
