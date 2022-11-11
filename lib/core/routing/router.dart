@@ -4,8 +4,10 @@ import 'package:tinder_app_new/core/routing/routes.dart';
 import 'package:tinder_app_new/ui/screens/all_screen_bottom.dart';
 import 'package:tinder_app_new/ui/screens/home_screen.dart';
 import 'package:tinder_app_new/ui/screens/login_screen.dart';
-import 'package:tinder_app_new/ui/screens/profile_screen.dart';
-import 'package:tinder_app_new/ui/screens/setting_screen.dart';
+import 'package:tinder_app_new/ui/screens/profile_screens/add_media_screen.dart';
+import 'package:tinder_app_new/ui/screens/profile_screens/edit_profile_screen.dart';
+import 'package:tinder_app_new/ui/screens/profile_screens/profile_screen.dart';
+import 'package:tinder_app_new/ui/screens/profile_screens/setting_screen.dart';
 import 'package:tinder_app_new/ui/screens/signup_screen.dart';
 import 'package:tinder_app_new/ui/screens/splash_screen.dart';
 
@@ -28,6 +30,10 @@ class PageRouter {
                 ));
       case Routes.settingScreen:
         return MaterialPageRoute(builder: (context) => const SettingScreen());
+        case Routes.addMediaScreen:
+        return MaterialPageRoute(builder: (context) => const AddMediaScreen());
+        case Routes.editProfileScreen:
+        return MaterialPageRoute(builder: (context) => const EditProfileScreen());
       case Routes.homeScreen:
         return MaterialPageRoute(builder: (context) => const HomeScreen());
       default:
