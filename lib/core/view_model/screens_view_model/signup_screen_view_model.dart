@@ -19,7 +19,7 @@ class SignUpScreenViewModel extends BaseModel {
   bool selectGender = false;
 
   String dropDnwName = 'Gender';
-  String? selectValue;
+  String? selectedValue;
   List<String> dropDnwList = ["Male", "Female", "Other"];
 
   bool obscureTextPwd = true;
@@ -35,7 +35,7 @@ class SignUpScreenViewModel extends BaseModel {
     prefs.setString('name', nameController.text);
     prefs.setString('email', emailController.text);
     prefs.setString('image', imageUrl.toString());
-    prefs.setString('gender', selectValue.toString());
+    prefs.setString('gender', selectedValue.toString());
     updateUI();
   }
 
@@ -70,7 +70,7 @@ class SignUpScreenViewModel extends BaseModel {
         .set({
           'name': nameController.text,
           'email': emailController.text,
-          'gender': selectValue.toString(),
+          'gender': selectedValue.toString(),
           'image_url': imageUrl,
           'isFavourite': false,
           'useToken': token,

@@ -14,7 +14,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   HomeScreenViewModel? model;
-  String? downloadURL;
 
   @override
   Widget build(BuildContext context) {

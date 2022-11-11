@@ -162,9 +162,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: MediaQuery.of(context).size.height * 0.062,
                     categoryList: model.dropDnwList,
                     hintText: model.dropDnwName,
-                    dropDownValue: model.selectValue,
+                    dropDownValue: model.selectedValue,
                     onChanged: (value) {
-                      model.selectValue = value;
+                      model.selectedValue = value;
                       setState(() {});
                     },
                   ),
@@ -188,7 +188,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           if (imageFile == null) {
                             model.imageError = true;
                             setState(() {});
-                          } else if (model.selectValue == null) {
+                          } else if (model.selectedValue == null) {
                             model.selectGender = true;
                             setState(() {});
                           } else {
@@ -249,6 +249,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   _getFromGallery() async {
     final XFile? pickImage = await imagePicker.pickImage(source: ImageSource.gallery, imageQuality: 10);
     imageFile = (File(pickImage!.path));
+
     String fileName = imageFile!.path.split('image_picker')[1];
     print('image Url $fileName');
 

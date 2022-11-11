@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,7 +5,8 @@ import 'package:tinder_app_new/core/provider/theme_changer.dart';
 import 'package:tinder_app_new/core/routing/routes.dart';
 import 'package:tinder_app_new/core/view_model/base_view.dart';
 import 'package:tinder_app_new/core/constant/color_constant.dart';
-import 'package:tinder_app_new/core/view_model/screens_view_model/setting_screen_view_model.dart';
+import 'package:tinder_app_new/core/view_model/screens_view_model/profile_screen_view_models/setting_screen_view_model.dart';
+import 'package:tinder_app_new/ui/widget/custom_drop_down.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -47,7 +47,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 icon: const Icon(Icons.arrow_back_outlined)),
           ),
           body: Padding(
-            padding: const EdgeInsets.only(top: 12.0,right: 10.0,left: 10.0),
+            padding: const EdgeInsets.only(top: 12.0, right: 10.0, left: 10.0),
             child: Column(
               children: [
                 Row(
@@ -63,15 +63,36 @@ class _SettingScreenState extends State<SettingScreen> {
                         })
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 2),
                 const Divider(),
+                Row(children: [
+                  const Text('Gender', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+                  const Spacer(),
+                  dropDownWidget(
+                    context: context,
+                    topHeight: 0,
+                    decoration: BoxDecoration(border: Border.all(color: Colors.transparent)),
+                    icon: const Icon(Icons.arrow_forward_ios, size: 20),
+                    width: MediaQuery.of(context).size.width * 0.29,
+                    height: MediaQuery.of(context).size.height * 0.062,
+                    categoryList: model.dropDnwList,
+                    hintText: model.genderGet ?? 'All',
+                    dropDownValue: model.selectValue,
+                    onChanged: (value) {
+                      model.selectValue = value;
+                      model.setDate();
+                      setState(() {});
+                    },
+                  ),
+                ]),
                 const Spacer(),
                 const Divider(),
                 IconButton(
                     onPressed: () {
                       /// LOG.OUT
                       Navigator.pushNamed(context, Routes.loginScreen);
-                }, icon: const Icon(Icons.logout, size: 28,)),
+                    },
+                    icon: const Icon(Icons.logout, size: 28)),
                 const SizedBox(height: 10),
               ],
             ),
@@ -79,6 +100,7 @@ class _SettingScreenState extends State<SettingScreen> {
         );
       },
       onModelReady: (model) {
+        model.getDate();
         this.model = model;
       },
     );

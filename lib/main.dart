@@ -47,9 +47,10 @@ class _MyappState extends State<Myapp> {
       child: MaterialApp(
         theme: themeNotifier.getTheme(),
         debugShowCheckedModeBanner: false,
-        // initialRoute: Routes.loginScreen,
+        initialRoute: Routes.loginScreen,
         // initialRoute: Routes.signupScreen,
-        initialRoute: Routes.allScreenBottom,
+        // initialRoute: Routes.allScreenBottom,
+        // initialRoute: Routes.settingScreen,
         onGenerateRoute: PageRouter.generateRoutes,
       ),
     );

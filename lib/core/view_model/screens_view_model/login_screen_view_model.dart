@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tinder_app_new/core/model/cards_model.dart';
-import 'package:tinder_app_new/core/model/profile_model.dart';
 import 'package:tinder_app_new/core/routing/routes.dart';
 import 'package:tinder_app_new/core/view_model/base_model.dart';
 import 'package:tinder_app_new/ui/widget/costom_snk.dart';
@@ -14,7 +13,7 @@ class LoginScreenViewModel extends BaseModel {
   List<ProfilePicture> list = [];
   String? name;
   String? email;
-  String? gender;
+  String? genderProfile;
   String? imageURL;
 
   bool loginCircular = false;
@@ -30,18 +29,20 @@ class LoginScreenViewModel extends BaseModel {
     for (var doc in querySnapshot.docs) {
       name = doc.get('name');
       email = doc.get('email');
-      gender = doc.get('gender');
+      genderProfile = doc.get('gender');
       imageURL = doc.get('image_url');
       print('NAME :: $name');
       print('EMAIL :: $email');
-      print('GENDER :: $gender');
+      print('GENDER :: $genderProfile');
       print('IMAGE-URL  :: $imageURL');
     }
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('name', name.toString());
-    prefs.setString('email', email.toString());
-    prefs.setString('gender', gender.toString());
-    prefs.setString('image', imageURL.toString());
+
+    /// SET DATA FOR PROFILE SCREEN
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('name', name.toString());
+    await prefs.setString('email', email.toString());
+    await prefs.setString('gender', genderProfile.toString());
+    await prefs.setString('image', imageURL.toString());
     updateUI();
   }
 

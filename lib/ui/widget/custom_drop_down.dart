@@ -3,35 +3,41 @@ import 'package:flutter/material.dart';
 dropDownWidget({
   String? dropDownValue,
   double? height,
+  double? width,
+  Icon? icon,
+  double? topHeight,
+  EdgeInsets? padding,
   List<String>? categoryList,
   String? hintText,
+  BoxDecoration? decoration,
   required BuildContext context,
   ValueChanged<String?>? onChanged,
 }) {
   return Container(
     height: height,
-    width: double.infinity,
-    margin: const EdgeInsets.only(left: 16, right: 16, top: 25),
-    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+    width: width ?? double.infinity,
+    margin: EdgeInsets.only(left: 16, right: 16, top: topHeight ?? 25),
+    decoration: decoration ?? BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all()
+  ),
     child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: DropdownButton(
           value: dropDownValue,
           isExpanded: true,
-          icon: const Icon(Icons.keyboard_arrow_down_sharp, color: Colors.black, size: 25),
+          icon: icon ?? const Icon(Icons.keyboard_arrow_down_sharp, size: 25),
           onChanged: onChanged,
           underline: Container(),
           hint: Text(
             hintText!,
             textAlign: TextAlign.center,
-            style: const TextStyle(color: Colors.black, fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
           items: categoryList!
               .map((e) => DropdownMenuItem(
                     value: e,
                     child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(e, style: const TextStyle(fontSize: 16, color: Colors.black))),
+                        padding: padding ??  const EdgeInsets.all(8.0),
+                        child: Text(e, style: const TextStyle(fontSize: 16))),
                   ))
               .toList(),
         )),
