@@ -7,11 +7,16 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tinder_app_new/core/constant/color_constant.dart';
 import 'package:tinder_app_new/core/constant/image_constant.dart';
+import 'package:tinder_app_new/core/model/edit_model.dart';
+import 'package:tinder_app_new/core/routing/routes.dart';
 import 'package:tinder_app_new/core/view_model/base_view.dart';
 import 'package:tinder_app_new/core/view_model/screens_view_model/profile_screen_view_models/edit_profile_screen_view_model.dart';
 
+// ignore: must_be_immutable
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({Key? key}) : super(key: key);
+  EditArguments? editArguments;
+
+  EditProfileScreen({Key? key, this.editArguments}) : super(key: key);
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -19,26 +24,14 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   EditProfileScreenViewModel? model;
-  final ImagePicker imagePicker = ImagePicker();
-  File? imageFile;
   final firebaseStorage = FirebaseStorage.instance;
-  String? image;
-  String? name;
-  TextEditingController nameController = TextEditingController();
-  String? email;
-  TextEditingController emailController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     SharedPreferences.getInstance().then((prefValue) => {
           setState(() {
-            image = prefValue.getString('image');
-            name = prefValue.getString('name');
-            email = prefValue.getString('email');
-            nameController = TextEditingController(text: name);
-            emailController = TextEditingController(text: email);
-            print('IMAGEEEEEEE :: $image');
+            model!.id = prefValue.getString('id');
           })
         });
   }
@@ -52,7 +45,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             actions: [
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Image.asset(ImageConstant.check),
+                child: GestureDetector(
+                    onTap: () {
+                      model.updateImage(model.id.toString());
+                      model.setDataForProfile();
+                      Navigator.pushNamedAndRemoveUntil(context, Routes.allScreenBottom, (route) => false);
+                      setState(() {});
+                    },
+                    child: Image.asset(ImageConstant.check)),
               )
             ],
             flexibleSpace: Container(
@@ -70,12 +70,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(image ?? ''),
-                      backgroundColor: Colors.white,
-                      maxRadius: MediaQuery.of(context).size.height * 0.08,
-                      minRadius: MediaQuery.of(context).size.width * 0.08,
-                    ),
+                    model.imageFile == null
+                        ? CircleAvatar(
+                            backgroundImage: NetworkImage(widget.editArguments!.imageUrl.toString()),
+                            backgroundColor: Colors.white,
+                            maxRadius: MediaQuery.of(context).size.height * 0.08,
+                            minRadius: MediaQuery.of(context).size.width * 0.08,
+                          )
+                        : CircleAvatar(
+                            backgroundImage: FileImage(model.imageFile!),
+                            backgroundColor: Colors.white,
+                            maxRadius: MediaQuery.of(context).size.height * 0.08,
+                            minRadius: MediaQuery.of(context).size.width * 0.08,
+                          )
                   ],
                 ),
                 Center(
@@ -90,10 +97,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                 ),
                 const Text('Name'),
-                TextFormField(controller: nameController),
+                TextFormField(controller: model.nameController),
                 const SizedBox(height: 20),
                 const Text('Email'),
-                TextFormField(controller: emailController)
+                TextFormField(controller: model.emailController)
               ],
             ),
           ),
@@ -101,6 +108,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       },
       onModelReady: (model) {
         this.model = model;
+        model.getUserDetail(widget.editArguments!.id.toString());
+        model.nameController.text = widget.editArguments!.name.toString();
+        model.emailController.text = widget.editArguments!.email.toString();
+        print('NAME  :: ${model.nameController.text}');
+        print('EMAIL  :: ${model.emailController.text}');
       },
     );
   }
@@ -136,13 +148,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   /// Get from gallery.
   _getFromGallery() async {
-    final XFile? pickImage = await imagePicker.pickImage(source: ImageSource.gallery, imageQuality: 10);
-    imageFile = (File(pickImage!.path));
+    final XFile? pickImage = await model!.imagePicker.pickImage(source: ImageSource.gallery, imageQuality: 10);
+    model!.imageFile = (File(pickImage!.path));
 
-    String fileName = imageFile!.path.split('image_picker')[1];
+    String fileName = model!.imageFile!.path.split('image_picker')[1];
     print('image Url $fileName');
 
-    var snapshot = await firebaseStorage.ref().child('images/$fileName').putFile(imageFile!);
+    var snapshot = await firebaseStorage.ref().child('images/$fileName').putFile(model!.imageFile!);
     var downloadUrl = await snapshot.ref.getDownloadURL();
     setState(() {
       model!.imageUrl = downloadUrl;
@@ -152,12 +164,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   /// Get from Camera.
   _getFromCamera() async {
-    final XFile? pickImage = await imagePicker.pickImage(source: ImageSource.camera, imageQuality: 10);
-    imageFile = (File(pickImage!.path));
-    String fileName = imageFile!.path.split('image_picker')[1];
+    final XFile? pickImage = await model!.imagePicker.pickImage(source: ImageSource.camera, imageQuality: 10);
+    model!.imageFile = (File(pickImage!.path));
+    String fileName = model!.imageFile!.path.split('image_picker')[1];
     print('image Url $fileName');
 
-    var snapshot = await firebaseStorage.ref().child('images/$fileName').putFile(imageFile!);
+    var snapshot = await firebaseStorage.ref().child('images/$fileName').putFile(model!.imageFile!);
     var downloadUrl = await snapshot.ref.getDownloadURL();
     setState(() {
       model!.imageUrl = downloadUrl;

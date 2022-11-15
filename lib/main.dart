@@ -14,8 +14,6 @@ Future<void> main() async {
   await Firebase.initializeApp();
   setLocator();
 
-  //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
   SharedPreferences.getInstance().then((prefs) {
     var darkModeOn = prefs.getBool("darkMode") ?? true;
 

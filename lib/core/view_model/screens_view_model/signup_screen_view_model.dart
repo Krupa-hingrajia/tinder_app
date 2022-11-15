@@ -45,6 +45,8 @@ class SignUpScreenViewModel extends BaseModel {
         email: emailController.text,
         password: passwordController.text,
       );
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('seen', true);
       // ignore: use_build_context_synchronously
       Navigator.pushNamedAndRemoveUntil(context, Routes.allScreenBottom, (route) => false);
     } on FirebaseAuthException catch (e) {
@@ -64,6 +66,8 @@ class SignUpScreenViewModel extends BaseModel {
       token = value;
     });
     String id = tinderUsers.collection("Users").doc().id;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('id', id);
     return tinderUsers
         .collection("Users")
         .doc(id)

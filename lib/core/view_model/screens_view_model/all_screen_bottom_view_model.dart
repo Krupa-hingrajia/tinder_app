@@ -7,5 +7,5 @@ import '../../../ui/screens/chat_screen.dart';
 
 class AllScreenBottomViewModel extends BaseModel {
   int selectedIndex = 0;
-  static List<Widget> pages = <Widget>[const HomeScreen(), const ChatScreen(), const ProfileScreen()];
+  static List<Widget> pages = <Widget>[const HomeScreen(), ChatScreen(), const ProfileScreen()];
 }

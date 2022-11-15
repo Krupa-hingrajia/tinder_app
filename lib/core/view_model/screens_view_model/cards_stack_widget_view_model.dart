@@ -6,7 +6,7 @@ class CardsStackWidgetViewModel extends BaseModel {
   String? gender;
   String? id;
 
-  getDate() async {
+  getGenderDate() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     genderGet = prefs.getString('gender');
     print('GENDER :- $genderGet');

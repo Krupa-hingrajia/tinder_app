@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tinder_app_new/core/constant/color_constant.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tinder_app_new/core/routing/routes.dart';
+import 'package:tinder_app_new/ui/widget/custom_btn.dart';
+import 'package:tinder_app_new/core/view_model/base_view.dart';
+import 'package:tinder_app_new/ui/widget/custom_text_field.dart';
 import 'package:tinder_app_new/core/constant/image_constant.dart';
 import 'package:tinder_app_new/core/constant/text_style_constant.dart';
 import 'package:tinder_app_new/core/routing/routes.dart';
@@ -93,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               if (model.formKey.currentState!.validate()) {
                                 model.loginCircular = false;
                                 setState(() {});
-                                model.signInUser(context: context);
+                                model.signInssUser(context: context);
                                 model.getUserDetail();
                                 model.loginCircular = true;
                                 setState(() {});
