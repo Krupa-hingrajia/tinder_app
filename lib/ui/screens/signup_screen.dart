@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +7,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tinder_app_new/core/constant/image_constant.dart';
 import 'package:tinder_app_new/core/view_model/base_view.dart';
 import 'package:tinder_app_new/ui/widget/custom_btn.dart';
-import 'package:tinder_app_new/ui/widget/custom_text_field.dart';
 import 'package:tinder_app_new/ui/widget/custom_drop_down.dart';
+import 'package:tinder_app_new/ui/widget/custom_text_field.dart';
 
+import '../../core/constant/color_constant.dart';
 import '../../core/view_model/screens_view_model/signup_screen_view_model.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -45,11 +47,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
             height: MediaQuery.of(context).size.height * 1,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              gradient: LinearGradient(
-                colors: [Colors.pinkAccent.shade400, Colors.pinkAccent],
+              gradient: const LinearGradient(
+                colors: [ColorConstant.yellowLight, ColorConstant.greenLight],
                 begin: Alignment.bottomLeft,
                 end: Alignment.topRight,
-                stops: const [0.2, 0.7],
+                stops: [0.2, 0.7],
                 tileMode: TileMode.repeated,
               ),
             ),
@@ -57,7 +59,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               scrollDirection: Axis.vertical,
               child: Column(
                 children: [
-                  Image.asset(ImageConstant.splashLogo),
+                  Image.asset(ImageConstant.splashLogo, color: ColorConstant.black),
                   GestureDetector(
                       onTap: () {
                         _showActionSheet(context);
@@ -70,7 +72,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   width: MediaQuery.of(context).size.width * 0.36,
                                   height: MediaQuery.of(context).size.width * 0.36,
                                   decoration: const BoxDecoration(
-                                      color: Colors.white,
+                                      color: ColorConstant.white,
                                       shape: BoxShape.circle,
                                       image: DecorationImage(image: AssetImage(ImageConstant.user), fit: BoxFit.cover)),
                                 ),
@@ -96,8 +98,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             )),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.014),
                   model.imageError == true
-                      ? const Text('Please upload image',
-                          style: TextStyle(color: Colors.white, fontSize: 16, letterSpacing: 1.1))
+                      ? const Text('Please upload image', style: TextStyle(color: Colors.white, fontSize: 16, letterSpacing: 1.1))
                       : Container(),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.025),
                   customTextField(
@@ -114,9 +115,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       validator: (value) {
                         String pattern = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
                         RegExp regex = RegExp(pattern);
-                        return value == null || value.isEmpty || !regex.hasMatch(value)
-                            ? 'Enter valid email address'
-                            : null;
+                        return value == null || value.isEmpty || !regex.hasMatch(value) ? 'Enter valid email address' : null;
                       }),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.025),
                   customTextField(
@@ -128,7 +127,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         },
                         child: Icon(
                           model.obscureTextPwd ? Icons.visibility : Icons.visibility_off_rounded,
-                          color: Colors.white,
+                          color: ColorConstant.black,
                         )),
                     controller: model.passwordController,
                     text: 'Password',
@@ -147,14 +146,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         },
                         child: Icon(
                           model.obscureTextConPwd ? Icons.visibility : Icons.visibility_off_rounded,
-                          color: Colors.white,
+                          color: ColorConstant.black,
                         )),
                     controller: model.confirmPassController,
                     text: 'Confirm Password',
                     validator: (value) {
-                      return model.passwordController.text != model.confirmPassController.text
-                          ? "password don't match"
-                          : null;
+                      return model.passwordController.text != model.confirmPassController.text ? "password don't match" : null;
                     },
                   ),
                   dropDownWidget(
@@ -173,8 +170,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           padding: EdgeInsets.only(top: 8.0, left: 34),
                           child: Align(
                               alignment: Alignment.topLeft,
-                              child: Text('Please select your gender',
-                                  style: TextStyle(color: Colors.white, fontSize: 16))),
+                              child: Text('Please select your gender', style: TextStyle(color: Colors.white, fontSize: 16))),
                         )
                       : Container(),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.025),
@@ -195,9 +191,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             model.createUser(context: context);
                             model.addTinderUser();
                             model.setDate();
-                            model.imageError == true || model.selectGender == true
-                                ? model.signupCircular = true
-                                : model.signupCircular = false;
+                            model.imageError == true || model.selectGender == true ? model.signupCircular = true : model.signupCircular = false;
                             setState(() {});
                           }
                           /*model.signupCircular = true;
@@ -239,8 +233,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('Cancel',
-                    style: TextStyle(color: Colors.red, letterSpacing: 1.2, fontWeight: FontWeight.w500)),
+                child: const Text('Cancel', style: TextStyle(color: Colors.red, letterSpacing: 1.2, fontWeight: FontWeight.w500)),
               ),
             ]));
   }

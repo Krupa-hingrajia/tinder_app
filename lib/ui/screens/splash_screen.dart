@@ -25,15 +25,19 @@ class _SplashScreenState extends State<SplashScreen> {
           body: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              gradient: LinearGradient(
-                colors: [ColorConstant.pinkAccentShade, ColorConstant.pinkAccent],
+              gradient: const LinearGradient(
+                colors: [ColorConstant.yellowLight, ColorConstant.greenLight],
                 begin: Alignment.bottomLeft,
                 end: Alignment.topRight,
-                stops: const [0.2, 0.7],
+                stops: [0.2, 0.7],
                 tileMode: TileMode.repeated,
               ),
             ),
-            child: Center(child: Image.asset(ImageConstant.splashLogo)),
+            child: Center(
+                child: Image.asset(
+              ImageConstant.splashLogo,
+              color: ColorConstant.black,
+            )),
           ),
         );
       },
