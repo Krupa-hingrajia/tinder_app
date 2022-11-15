@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tinder_app_new/core/constant/color_constant.dart';
 import 'package:tinder_app_new/core/constant/image_constant.dart';
 import 'package:tinder_app_new/core/routing/routes.dart';
@@ -14,7 +16,26 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen> with AfterLayoutMixin<SplashScreen> {
+  Future checkFirstSeen() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool seen = (prefs.getBool('seen') ?? false);
+
+    if (seen) {
+      Timer(const Duration(seconds: 5), () {
+        Navigator.pushNamedAndRemoveUntil(context, Routes.allScreenBottom, (route) => false);
+      });
+    } else {
+      // await prefs.setBool('seen', true);
+      Timer(const Duration(seconds: 5), () {
+        Navigator.pushNamedAndRemoveUntil(context, Routes.loginScreen, (route) => false);
+      });
+    }
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) => checkFirstSeen();
+
   SplashScreenViewModel? model;
 
   @override
@@ -23,25 +44,21 @@ class _SplashScreenState extends State<SplashScreen> {
       builder: (buildContext, model, child) {
         return Scaffold(
           body: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              gradient: LinearGradient(
-                colors: [ColorConstant.pinkAccentShade, ColorConstant.pinkAccent],
-                begin: Alignment.bottomLeft,
-                end: Alignment.topRight,
-                stops: const [0.2, 0.7],
-                tileMode: TileMode.repeated,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                gradient: const LinearGradient(
+                  colors: [ColorConstant.yellowLight, ColorConstant.greenLight],
+                  begin: Alignment.bottomLeft,
+                  end: Alignment.topRight,
+                  stops: [0.2, 0.7],
+                  tileMode: TileMode.repeated,
+                ),
               ),
-            ),
-            child: Center(child: Image.asset(ImageConstant.splashLogo)),
-          ),
+              child: Center(child: Image.asset(ImageConstant.splashLogo,color: Colors.black))),
         );
       },
       onModelReady: (model) {
         this.model = model;
-        Timer(const Duration(seconds: 6), () {
-          Navigator.pushNamedAndRemoveUntil(context, Routes.loginScreen, (route) => false);
-        });
       },
     );
   }

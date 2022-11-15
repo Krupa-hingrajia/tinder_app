@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tinder_app_new/core/constant/color_constant.dart';
 
-import '../../core/constant/color_constant.dart';
 
 class NotificationBadge extends StatelessWidget {
   const NotificationBadge({super.key});
@@ -17,10 +17,7 @@ class NotificationBadge extends StatelessWidget {
       child: const Center(
         child: Padding(
           padding: EdgeInsets.all(8.0),
-          child: Text(
-            'T',
-            style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
-          ),
+          child: Text('T', style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
         ),
       ),
     );

@@ -4,21 +4,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tinder_app_new/core/constant/color_constant.dart';
 import 'package:tinder_app_new/core/constant/image_constant.dart';
 import 'package:tinder_app_new/core/constant/text_style_constant.dart';
+import 'package:tinder_app_new/core/model/edit_model.dart';
+import 'package:tinder_app_new/core/routing/routes.dart';
 import 'package:tinder_app_new/core/view_model/base_view.dart';
 import 'package:tinder_app_new/core/view_model/screens_view_model/profile_screen_view_models/profile_screen_view_model.dart';
 import 'package:tinder_app_new/ui/screens/profile_screens/add_media_screen.dart';
-import 'package:tinder_app_new/ui/screens/profile_screens/edit_profile_screen.dart';
 import 'package:tinder_app_new/ui/screens/profile_screens/setting_screen.dart';
 import 'package:tinder_app_new/ui/widget/carousel_container.dart';
 import 'package:tinder_app_new/ui/widget/custom_btn.dart';
-import 'package:tinder_app_new/ui/widget/custom_dailog.dart';
 
 class ProfileScreen extends StatefulWidget {
-  // UserArguments? userArguments;
-  const ProfileScreen({
-    Key? key,
-    /*this.userArguments*/
-  }) : super(key: key);
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -26,6 +22,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   ProfileScreenViewModel? model;
+  String? id;
   String? name;
   String? email;
   String? image;
@@ -35,6 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
     SharedPreferences.getInstance().then((prefValue) => {
           setState(() {
+            id = prefValue.getString('id');
             name = prefValue.getString('name');
             email = prefValue.getString('email');
             image = prefValue.getString('image');
@@ -108,7 +106,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     GestureDetector(
                       onTap: () {
                         /// EDIT PROFILE
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const EditProfileScreen()));
+                        Navigator.pushNamed(context, Routes.editProfileScreen,
+                            arguments: EditArguments(email: email, name: name, imageUrl: image, id: id));
                       },
                       child: iconBtn(
                           child: const Icon(Icons.edit_note_outlined, color: ColorConstant.black, size: 25),

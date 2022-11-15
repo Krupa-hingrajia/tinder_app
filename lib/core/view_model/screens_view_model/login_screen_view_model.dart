@@ -9,11 +9,9 @@ import 'package:tinder_app_new/ui/widget/costom_snk.dart';
 
 class LoginScreenViewModel extends BaseModel {
   final formKey = GlobalKey<FormState>();
-  FirebaseFirestore firebase = FirebaseFirestore.instance;
-  List<ProfilePicture> list = [];
+  String? id;
   String? name;
   String? email;
-  String? genderProfile;
   String? imageURL;
 
   bool loginCircular = false;
@@ -27,21 +25,22 @@ class LoginScreenViewModel extends BaseModel {
         await FirebaseFirestore.instance.collection('Users').where('email', isEqualTo: emailController.text).get();
 
     for (var doc in querySnapshot.docs) {
+      id = doc.get('id');
       name = doc.get('name');
       email = doc.get('email');
-      genderProfile = doc.get('gender');
       imageURL = doc.get('image_url');
+
+      print('ID :: $id');
       print('NAME :: $name');
       print('EMAIL :: $email');
-      print('GENDER :: $genderProfile');
       print('IMAGE-URL  :: $imageURL');
     }
 
     /// SET DATA FOR PROFILE SCREEN
     final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('id', id.toString());
     await prefs.setString('name', name.toString());
     await prefs.setString('email', email.toString());
-    await prefs.setString('gender', genderProfile.toString());
     await prefs.setString('image', imageURL.toString());
     updateUI();
   }
@@ -52,6 +51,8 @@ class LoginScreenViewModel extends BaseModel {
         email: emailController.text,
         password: passwordController.text,
       );
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('seen', true);
       // ignore: use_build_context_synchronously
       Navigator.pushNamedAndRemoveUntil(context, Routes.allScreenBottom, (route) => false);
     } on FirebaseAuthException catch (e) {

@@ -14,8 +14,6 @@ Future<void> main() async {
   await Firebase.initializeApp();
   setLocator();
 
-  //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
   SharedPreferences.getInstance().then((prefs) {
     var darkModeOn = prefs.getBool("darkMode") ?? true;
 
@@ -47,7 +45,8 @@ class _MyappState extends State<Myapp> {
       child: MaterialApp(
         theme: themeNotifier.getTheme(),
         debugShowCheckedModeBanner: false,
-        initialRoute: Routes.loginScreen,
+        initialRoute: Routes.splashScreen,
+        // initialRoute: Routes.loginScreen,
         // initialRoute: Routes.signupScreen,
         // initialRoute: Routes.allScreenBottom,
         // initialRoute: Routes.settingScreen,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tinder_app_new/core/constant/color_constant.dart';
 import 'package:tinder_app_new/core/view_model/base_view.dart';
 import 'package:tinder_app_new/core/view_model/screens_view_model/all_screen_bottom_view_model.dart';
