@@ -4,7 +4,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tinder_app_new/core/constant/image_constant.dart';
 import 'package:tinder_app_new/core/view_model/base_view.dart';
 import 'package:tinder_app_new/ui/widget/custom_btn.dart';
@@ -171,7 +170,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           padding: EdgeInsets.only(top: 8.0, left: 34),
                           child: Align(
                               alignment: Alignment.topLeft,
-                              child: Text('Please select your gender', style: TextStyle(color: Colors.white, fontSize: 16))),
+                              child: Text('Please select your gender', style: TextStyle(color: ColorConstant.black, fontSize: 16))),
                         )
                       : Container(),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.025),

@@ -67,8 +67,8 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
     // list.clear();
     var data = await firebase.collection('Users').where('gender', isEqualTo: model!.genderGet).get();
     for (int i = 0; i < data.docs.length; i++) {
-      ProfilePicture model = ProfilePicture(data.docs[i].data()['image_url'], data.docs[i].data()['name'],
-          data.docs[i].data()['gender'], data.docs[i].data()['id'], data.docs[i].data()['isFavourite']);
+      ProfilePicture model = ProfilePicture(data.docs[i].data()['image_url'], data.docs[i].data()['name'], data.docs[i].data()['gender'],
+          data.docs[i].data()['id'], data.docs[i].data()['isFavourite']);
       profilePicture.add(model);
     }
   }
@@ -90,11 +90,10 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
                         clipBehavior: Clip.none,
                         alignment: Alignment.center,
                         children: List.generate(profilePicture.length, (index) {
-
-                       //   newIndex + 1;
+                          //   newIndex + 1;
                           if (index == profilePicture.length - 1) {
-                           // newIndex = index;
-                          //  newIndex =  profilePicture.length - 1;
+                            // newIndex = index;
+                            //  newIndex =  profilePicture.length - 1;
                             return PositionedTransition(
                               rect: RelativeRectTween(
                                 begin: RelativeRect.fromSize(const Rect.fromLTWH(0, 0, 580, 340), const Size(580, 340)),
@@ -230,8 +229,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
       print('User granted permission');
 
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        print(
-            'Message title: ${message.notification?.title}, body: ${message.notification?.body}, data: ${message.data}');
+        print('Message title: ${message.notification?.title}, body: ${message.notification?.body}, data: ${message.data}');
 
         showSimpleNotification(
           background: ColorConstant.white,
@@ -241,11 +239,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
           GestureDetector(
               onTap: () {
                 Navigator.pushNamed(context, Routes.chatScreen,
-                    arguments: MessageArguments(
-                        title: message.notification?.title,
-                        body: message.notification?.body,
-                        image: profileImage
-                    ));
+                    arguments: MessageArguments(title: message.notification?.title, body: message.notification?.body, image: profileImage));
               },
               child: Text(message.notification!.title.toString(), style: const TextStyle(color: Colors.black))),
           leading: const NotificationBadge(),
@@ -268,8 +262,6 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
       userName = element.get('name');
     });
 
-    print('______________: $userToken');
-
     try {
       var headers = {
         'Authorization':
@@ -279,7 +271,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
       var request = http.Request('POST', Uri.parse('https://fcm.googleapis.com/fcm/send'));
       request.body = json.encode({
         "to":
-            "c3Rul3wrS5--OjIZkOfU-2:APA91bHVbnDTzteAfKxsyefHrT8BXChPBIv6C8Uqrv1QW7DqjguJ1jGz-LOG9KJJDjxBzKt869ZzruXL18lkCeq59_IUqGym9GWi2vhlHmbjogMyvk7AZ9xTlRbtZ5Qygg5yhmxxHPxP",
+            "d88c0_6XRjOoo3d-oA8WKF:APA91bFZUuPUXoP0_AOdbxekFPy3hU9R5G5F6KVV7qBE5BiZP35eNLn2m9ynIEXpUJtg0tomMbGC4QiZBGn1Ot2qXOKYs4pOuRb1EZexy-FAnc0a9gA1-A5lOWAwKD-dEbOPf3eTNzAg",
         "data": {"via": "FlutterFire Cloud Messaging!!!", "count": 1},
         "notification": {"title": "You Got Friend Request From $userName", "body": userName}
       });
@@ -288,6 +280,10 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
       http.StreamedResponse response = await request.send();
 
       print(response.toString());
+
+      //Firebase notification status send
+
+      await firebase.collection('Users').doc(userId).update({'notification_status': 'send'});
 
       if (response.statusCode == 200) {
         print(await response.stream.bytesToString());

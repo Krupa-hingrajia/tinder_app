@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tinder_app_new/core/routing/routes.dart';
 import 'package:tinder_app_new/core/view_model/base_model.dart';
@@ -65,6 +65,7 @@ class SignUpScreenViewModel extends BaseModel {
     await firebaseMessaging.getToken().then((value) {
       token = value;
     });
+    print("******** TOKEN *******: $token");
     String id = tinderUsers.collection("Users").doc().id;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('id', id);
