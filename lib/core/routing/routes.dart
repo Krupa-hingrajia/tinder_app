@@ -4,6 +4,7 @@ class Routes {
   static const String signupScreen = 'SignupScreen';
   static const String allScreenBottom = 'AllScreenBottom';
   static const String homeScreen = 'HomeScreen';
+  static const String notificationScreen = 'NotificationScreen';
   static const String chatScreen = 'ChatScreen';
   static const String profileScreen = 'ProfileScreen';
   static const String settingScreen = 'SettingScreen';

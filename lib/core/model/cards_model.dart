@@ -3,7 +3,7 @@ class ProfilePicture {
   final String? userName;
   final String? gender;
   final String? id;
-  final bool? isFavourite;
+  bool isFavourite = false;
 
   ProfilePicture(this.imageURL, this.userName, this.gender, this.id, this.isFavourite);
 }

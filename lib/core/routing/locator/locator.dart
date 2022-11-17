@@ -4,6 +4,7 @@ import 'package:tinder_app_new/core/view_model/screens_view_model/cards_stack_wi
 import 'package:tinder_app_new/core/view_model/screens_view_model/chat_screen_view_model.dart';
 import 'package:tinder_app_new/core/view_model/screens_view_model/home_screen_view_model.dart';
 import 'package:tinder_app_new/core/view_model/screens_view_model/login_screen_view_model.dart';
+import 'package:tinder_app_new/core/view_model/screens_view_model/notification_screen_view_model.dart';
 import 'package:tinder_app_new/core/view_model/screens_view_model/profile_screen_view_models/add_media_screen_view_model.dart';
 import 'package:tinder_app_new/core/view_model/screens_view_model/profile_screen_view_models/edit_profile_screen_view_model.dart';
 import 'package:tinder_app_new/core/view_model/screens_view_model/profile_screen_view_models/profile_screen_view_model.dart';
@@ -20,6 +21,7 @@ setLocator() {
   locator.registerLazySingleton(() => SignUpScreenViewModel());
   locator.registerLazySingleton(() => AllScreenBottomViewModel());
   locator.registerLazySingleton(() => HomeScreenViewModel());
+  locator.registerLazySingleton(() => NotificationScreenViewModel());
   locator.registerLazySingleton(() => ProfileScreenViewModel());
   locator.registerLazySingleton(() => SettingScreenViewModel());
   locator.registerLazySingleton(() => ChatScreenViewModel());

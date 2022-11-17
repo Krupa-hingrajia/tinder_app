@@ -1,17 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tinder_app_new/core/constant/color_constant.dart';
-import 'package:tinder_app_new/core/constant/image_constant.dart';
-import 'package:tinder_app_new/core/model/message_model.dart';
 import 'package:tinder_app_new/core/view_model/base_view.dart';
 
 import '../../core/model/cards_model.dart';
 import '../../core/view_model/screens_view_model/chat_screen_view_model.dart';
 
 class ChatScreen extends StatefulWidget {
-  MessageArguments? messageArguments;
-
-  ChatScreen({Key? key, this.messageArguments}) : super(key: key);
+  const ChatScreen({Key? key}) : super(key: key);
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -36,39 +32,16 @@ class _ChatScreenState extends State<ChatScreen> {
     return BaseView<ChatScreenViewModel>(
       builder: (buildContext, model, child) {
         return Scaffold(
-            appBar: AppBar(
-              title: const Text('Messages'),
-              flexibleSpace: Container(
-                decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                  colors: <Color>[ColorConstant.greenLight, ColorConstant.greenLight],
-                )),
-              ),
+          appBar: AppBar(
+            title: const Text('Messages'),
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                colors: <Color>[ColorConstant.greenLight, ColorConstant.greenLight],
+              )),
             ),
-            body: Padding(
-                padding: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
-                child: Column(children: [
-                  Row(children: [
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(widget.messageArguments!.image.toString()),
-                      backgroundColor: Colors.white,
-                      maxRadius: MediaQuery.of(context).size.height * 0.04,
-                      minRadius: MediaQuery.of(context).size.width * 0.04,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Column(
-                        children: [
-                          Text('${widget.messageArguments?.body}',
-                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                          const Text('requested to follow you',
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                        ],
-                      ),
-                    )
-                  ])
-                ]))
-            /*FutureBuilder(
+          ),
+          body: FutureBuilder(
             future: getUsers(),
             builder: (BuildContext context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
@@ -83,13 +56,11 @@ class _ChatScreenState extends State<ChatScreen> {
               }
               return const Center(child: CircularProgressIndicator(color: ColorConstant.greenLight));
             },
-          ),*/
-            );
+          ),
+        );
       },
       onModelReady: (model) {
         this.model = model;
-        print('TITLE ::> ${widget.messageArguments!.image}');
-        // print('BODY ::> ${widget.messageArguments!.body}');
       },
     );
   }

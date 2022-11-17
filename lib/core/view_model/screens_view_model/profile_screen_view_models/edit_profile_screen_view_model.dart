@@ -8,6 +8,7 @@ import 'package:tinder_app_new/core/view_model/base_model.dart';
 
 class EditProfileScreenViewModel extends BaseModel {
   String? id;
+  bool circular = false;
   File? imageFile;
   String? imageUrl;
   final ImagePicker imagePicker = ImagePicker();
