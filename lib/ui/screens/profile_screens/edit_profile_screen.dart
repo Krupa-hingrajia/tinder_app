@@ -38,83 +38,84 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseView<EditProfileScreenViewModel>(
-      builder: (buildContext, model, child) {
-        return Scaffold(
-          appBar: AppBar(
-            actions: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: GestureDetector(
-                    onTap: () {
-                      model.updateImage(model.id.toString());
-                      model.setDataForProfile();
-                      Navigator.pushNamedAndRemoveUntil(context, Routes.allScreenBottom, (route) => false);
-                      setState(() {});
-                    },
-                    child: Image.asset(ImageConstant.check)),
-              )
+    return BaseView<EditProfileScreenViewModel>(builder: (buildContext, model, child) {
+      return Scaffold(
+        appBar: AppBar(
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: GestureDetector(
+                  onTap: () {
+                    model.circular = true;
+                    model.updateImage(model.id.toString());
+                    model.setDataForProfile();
+                    Navigator.pushNamedAndRemoveUntil(context, Routes.allScreenBottom, (route) => false);
+                    setState(() {});
+                  },
+                  child: model.circular == true
+                      ? const SizedBox(height: 17, width: 21, child: CircularProgressIndicator(color: Colors.blue))
+                      : Image.asset(ImageConstant.check)),
+            )
+          ],
+          flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+            colors: <Color>[ColorConstant.yellowLight, ColorConstant.greenLight],
+          ))),
+          title: const Text('Edit profile'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(19.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  model.imageFile == null
+                      ? CircleAvatar(
+                          backgroundImage: NetworkImage(widget.editArguments!.imageUrl.toString()),
+                          backgroundColor: Colors.white,
+                          maxRadius: MediaQuery.of(context).size.height * 0.08,
+                          minRadius: MediaQuery.of(context).size.width * 0.08,
+                        )
+                      : CircleAvatar(
+                          backgroundImage: FileImage(model.imageFile!),
+                          backgroundColor: Colors.white,
+                          maxRadius: MediaQuery.of(context).size.height * 0.08,
+                          minRadius: MediaQuery.of(context).size.width * 0.08,
+                        )
+                ],
+              ),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 12.0, bottom: 22.0),
+                  child: GestureDetector(
+                      onTap: () {
+                        _showActionSheet(context);
+                        setState(() {});
+                      },
+                      child: const Text('Change profile photo', style: TextStyle(color: Colors.blue, fontSize: 17))),
+                ),
+              ),
+              const Text('Name'),
+              TextFormField(controller: model.nameController),
+              const SizedBox(height: 20),
+              const Text('Email'),
+              TextFormField(controller: model.emailController)
             ],
-            flexibleSpace: Container(
-                decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-              colors: <Color>[ColorConstant.yellowLight, ColorConstant.greenLight],
-            ))),
-            title: const Text('Edit profile'),
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(19.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    model.imageFile == null
-                        ? CircleAvatar(
-                            backgroundImage: NetworkImage(widget.editArguments!.imageUrl.toString()),
-                            backgroundColor: Colors.white,
-                            maxRadius: MediaQuery.of(context).size.height * 0.08,
-                            minRadius: MediaQuery.of(context).size.width * 0.08,
-                          )
-                        : CircleAvatar(
-                            backgroundImage: FileImage(model.imageFile!),
-                            backgroundColor: Colors.white,
-                            maxRadius: MediaQuery.of(context).size.height * 0.08,
-                            minRadius: MediaQuery.of(context).size.width * 0.08,
-                          )
-                  ],
-                ),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 12.0, bottom: 22.0),
-                    child: GestureDetector(
-                        onTap: () {
-                          _showActionSheet(context);
-                          setState(() {});
-                        },
-                        child: const Text('Change profile photo', style: TextStyle(color: Colors.blue, fontSize: 17))),
-                  ),
-                ),
-                const Text('Name'),
-                TextFormField(controller: model.nameController),
-                const SizedBox(height: 20),
-                const Text('Email'),
-                TextFormField(controller: model.emailController)
-              ],
-            ),
-          ),
-        );
-      },
-      onModelReady: (model) {
-        this.model = model;
-        model.getUserDetail(widget.editArguments!.id.toString());
-        model.nameController.text = widget.editArguments!.name.toString();
-        model.emailController.text = widget.editArguments!.email.toString();
-        print('NAME  :: ${model.nameController.text}');
-        print('EMAIL  :: ${model.emailController.text}');
-      },
-    );
+        ),
+      );
+    }, onModelReady: (model) {
+      this.model = model;
+      model.circular = false;
+      model.getUserDetail(widget.editArguments!.id.toString());
+      model.nameController.text = widget.editArguments!.name.toString();
+      model.emailController.text = widget.editArguments!.email.toString();
+      print('NAME  :: ${model.nameController.text}');
+      print('EMAIL  :: ${model.emailController.text}');
+    });
   }
 
   /// Bottom Sheet.

@@ -6,6 +6,7 @@ import 'package:tinder_app_new/ui/screens/all_screen_bottom.dart';
 import 'package:tinder_app_new/ui/screens/chat_screen.dart';
 import 'package:tinder_app_new/ui/screens/home_screen.dart';
 import 'package:tinder_app_new/ui/screens/login_screen.dart';
+import 'package:tinder_app_new/ui/screens/notification_screen.dart';
 import 'package:tinder_app_new/ui/screens/profile_screens/add_media_screen.dart';
 import 'package:tinder_app_new/ui/screens/profile_screens/edit_profile_screen.dart';
 import 'package:tinder_app_new/ui/screens/profile_screens/profile_screen.dart';
@@ -35,9 +36,11 @@ class PageRouter {
         return MaterialPageRoute(builder: (context) => EditProfileScreen(editArguments: editArguments));
       case Routes.homeScreen:
         return MaterialPageRoute(builder: (context) => const HomeScreen());
-      case Routes.chatScreen:
+      case Routes.notificationScreen:
         MessageArguments messageArguments = settings.arguments as MessageArguments;
-        return MaterialPageRoute(builder: (context) => ChatScreen(messageArguments: messageArguments));
+        return MaterialPageRoute(builder: (context) => NotificationScreen(messageArguments: messageArguments));
+      case Routes.chatScreen:
+        return MaterialPageRoute(builder: (context) => const ChatScreen());
       default:
         return MaterialPageRoute(
           builder: (context) => const Scaffold(

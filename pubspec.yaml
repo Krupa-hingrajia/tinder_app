@@ -48,8 +48,9 @@ dependencies:
   overlay_support: ^2.0.1
   http:
   carousel_slider: ^4.1.1
-  google_mlkit_face_detection: ^0.5.0
   after_layout: ^1.2.0
+  card_swiper: ^2.0.4
+  cached_network_image: ^3.2.2
 
 dev_dependencies:
   flutter_test:

@@ -89,7 +89,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 const Divider(),
                 IconButton(
                     onPressed: () {
-                      /// LOG.OUT
+                      /// LOG OUT
                       Navigator.pushNamed(context, Routes.loginScreen);
                     },
                     icon: const Icon(Icons.logout, size: 28)),
