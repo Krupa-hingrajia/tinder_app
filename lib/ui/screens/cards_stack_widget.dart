@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:card_swiper/card_swiper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:http/http.dart' as http;
 import 'package:overlay_support/overlay_support.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,6 +31,7 @@ class CardsStackWidget extends StatefulWidget {
 class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerProviderStateMixin {
   CardsStackWidgetViewModel? model;
   String? profileImage;
+  String? genderGet;
   FirebaseFirestore firebase = FirebaseFirestore.instance;
   late final FirebaseMessaging _messaging;
   List<ProfilePicture> profilePicture = [];
@@ -46,8 +47,8 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
     super.initState();
     SharedPreferences.getInstance().then((prefValue) => {
           setState(() {
-            model!.genderGet = prefValue.getString('gender');
-            print('GENDER :- ${model!.genderGet}');
+            genderGet = prefValue.getString('gender');
+            print('GENDER :- $genderGet');
           })
         });
     _animationController = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
@@ -70,10 +71,10 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
   }
 
   getImages() async {
-    var data = await firebase.collection('Users').where('gender', isEqualTo: model!.genderGet).get();
+    var data = await firebase.collection('Users').where('gender', isEqualTo: genderGet).get();
     for (int i = 0; i < data.docs.length; i++) {
-      ProfilePicture model = ProfilePicture(data.docs[i].data()['image_url'], data.docs[i].data()['name'], data.docs[i].data()['gender'],
-          data.docs[i].data()['id'], data.docs[i].data()['isFavourite']);
+      ProfilePicture model = ProfilePicture(data.docs[i].data()['image_url'], data.docs[i].data()['name'],
+          data.docs[i].data()['gender'], data.docs[i].data()['id'], data.docs[i].data()['isFavourite']);
       profilePicture.add(model);
     }
   }
@@ -153,6 +154,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
       },
       onModelReady: (model) {
         this.model = model;
+        getImages();
       },
     );
   }
@@ -268,7 +270,6 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
     );
   }
 }
-
 /*ValueListenableBuilder(
                     valueListenable: swipeNotifier,
                     builder: (context, swipe, _) => Stack(
