@@ -49,8 +49,8 @@ dependencies:
   http:
   carousel_slider: ^4.1.1
   after_layout: ^1.2.0
-  flutter_swiper: ^1.1.6
   cached_network_image: ^3.2.2
+  card_swiper: ^2.0.4
 
 dev_dependencies:
   flutter_test:
