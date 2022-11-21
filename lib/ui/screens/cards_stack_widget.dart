@@ -32,6 +32,8 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
   CardsStackWidgetViewModel? model;
   String? profileImage;
   String? genderGet;
+  String? ageRangeGet;
+  bool? showTinderGet;
   FirebaseFirestore firebase = FirebaseFirestore.instance;
   late final FirebaseMessaging _messaging;
   List<ProfilePicture> profilePicture = [];
@@ -48,7 +50,11 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
     SharedPreferences.getInstance().then((prefValue) => {
           setState(() {
             genderGet = prefValue.getString('gender');
+            ageRangeGet = prefValue.getString('ageRange');
+            showTinderGet = prefValue.getBool('switchState');
             print('GENDER :- $genderGet');
+            print('AGE Range :- $ageRangeGet');
+            print('showTinderGet :- $showTinderGet');
           })
         });
     _animationController = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
@@ -480,6 +486,4 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
       print(e);
     }
   }
-}
-
- */
+}*/
