@@ -98,7 +98,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             )),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.014),
                   model.imageError == true
-                      ? const Text('Please upload image', style: TextStyle(color: Colors.white, fontSize: 16, letterSpacing: 1.1))
+                      ? const Text('Please upload image',
+                          style: TextStyle(color: Colors.red, fontSize: 16, letterSpacing: 1.1))
                       : Container(),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.025),
                   customTextField(
@@ -115,7 +116,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       validator: (value) {
                         String pattern = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
                         RegExp regex = RegExp(pattern);
-                        return value == null || value.isEmpty || !regex.hasMatch(value) ? 'Enter valid email address' : null;
+                        return value == null || value.isEmpty || !regex.hasMatch(value)
+                            ? 'Enter valid email address'
+                            : null;
                       }),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.025),
                   customTextField(
@@ -151,7 +154,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     controller: model.confirmPassController,
                     text: 'Confirm Password',
                     validator: (value) {
-                      return model.passwordController.text != model.confirmPassController.text ? "password don't match" : null;
+                      return model.passwordController.text != model.confirmPassController.text
+                          ? "password don't match"
+                          : null;
                     },
                   ),
                   dropDownWidget(
@@ -170,7 +175,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           padding: EdgeInsets.only(top: 8.0, left: 34),
                           child: Align(
                               alignment: Alignment.topLeft,
-                              child: Text('Please select your gender', style: TextStyle(color: ColorConstant.black, fontSize: 16))),
+                              child: Text('Please select your gender',
+                                  style: TextStyle(color: ColorConstant.red, fontSize: 16))),
                         )
                       : Container(),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.025),
@@ -188,14 +194,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             model.selectGender = true;
                             setState(() {});
                           } else {
+                            model.signupCircular = false;
+                            setState(() {});
                             model.createUser(context: context);
                             model.addTinderUser();
                             model.setDate();
-                            model.imageError == true || model.selectGender == true ? model.signupCircular = true : model.signupCircular = false;
+                            model.imageError == true || model.selectGender == true
+                                ? model.signupCircular = false
+                                : model.signupCircular = true;
+                            model.signupCircular = true;
                             setState(() {});
                           }
-                          /*model.signupCircular = true;
-                          setState(() {});*/
                         }
                       }),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.036),
@@ -210,7 +219,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     });
   }
 
-  /// Bottom Sheet
+  /// Bottom Sheet.
   void _showActionSheet(BuildContext context) {
     showCupertinoModalPopup<void>(
         context: context,
@@ -233,7 +242,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('Cancel', style: TextStyle(color: Colors.red, letterSpacing: 1.2, fontWeight: FontWeight.w500)),
+                child: const Text('Cancel',
+                    style: TextStyle(color: Colors.red, letterSpacing: 1.2, fontWeight: FontWeight.w500)),
               ),
             ]));
   }

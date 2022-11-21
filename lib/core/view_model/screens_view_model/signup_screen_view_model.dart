@@ -80,6 +80,7 @@ class SignUpScreenViewModel extends BaseModel {
           'isFavourite': false,
           'useToken': token,
           'id': id,
+          'showMeOnTinder': true,
         })
         .then((value) => print("User data Added"))
         .catchError((error) => print("User couldn't be added."));

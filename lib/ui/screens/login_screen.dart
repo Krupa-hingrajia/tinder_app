@@ -20,6 +20,15 @@ class _LoginScreenState extends State<LoginScreen> {
   LoginScreenViewModel? model;
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    model!.emailController.clear();
+    model!.passwordController.clear();
+    model!.loginCircular = false;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BaseView<LoginScreenViewModel>(
       builder: (buildContext, model, child) {

@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tinder_app_new/core/model/cards_model.dart';
 import 'package:tinder_app_new/core/routing/routes.dart';
 import 'package:tinder_app_new/core/view_model/base_model.dart';
 import 'package:tinder_app_new/ui/widget/costom_snk.dart';
