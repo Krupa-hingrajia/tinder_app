@@ -3,10 +3,12 @@ import 'package:tinder_app_new/core/model/edit_model.dart';
 import 'package:tinder_app_new/core/model/message_model.dart';
 import 'package:tinder_app_new/core/routing/routes.dart';
 import 'package:tinder_app_new/ui/screens/all_screen_bottom.dart';
-import 'package:tinder_app_new/ui/screens/chat_screen.dart';
+import 'package:tinder_app_new/ui/screens/chat_screens/chat_screen.dart';
+import 'package:tinder_app_new/ui/screens/chat_screens/personal_chat_screen.dart';
 import 'package:tinder_app_new/ui/screens/home_screen.dart';
 import 'package:tinder_app_new/ui/screens/login_screen.dart';
-import 'package:tinder_app_new/ui/screens/notification_screen.dart';
+import 'package:tinder_app_new/ui/screens/notification_screens/notification_screen.dart';
+import 'package:tinder_app_new/ui/screens/notification_screens/request_sender_profile.dart';
 import 'package:tinder_app_new/ui/screens/profile_screens/add_media_screen.dart';
 import 'package:tinder_app_new/ui/screens/profile_screens/edit_profile_screen.dart';
 import 'package:tinder_app_new/ui/screens/profile_screens/profile_screen.dart';
@@ -39,8 +41,15 @@ class PageRouter {
       case Routes.notificationScreen:
         MessageArguments messageArguments = settings.arguments as MessageArguments;
         return MaterialPageRoute(builder: (context) => NotificationScreen(messageArguments: messageArguments));
+      case Routes.requestSenderScreen:
+        MessageArguments messageArguments = settings.arguments as MessageArguments;
+        return MaterialPageRoute(builder: (context) => RequestSenderProfile(messageArguments: messageArguments));
       case Routes.chatScreen:
         return MaterialPageRoute(builder: (context) => const ChatScreen());
+      case Routes.personalChatScreen:
+        PersonalMessageArguments personalMessageArguments = settings.arguments as PersonalMessageArguments;
+        return MaterialPageRoute(
+            builder: (context) => PersonalChatScreen(personalMessageArguments: personalMessageArguments));
       default:
         return MaterialPageRoute(
           builder: (context) => const Scaffold(

@@ -39,4 +39,5 @@ class SettingScreenViewModel extends BaseModel {
   showMeOnTinder(String userId) async {
     await firebase.collection('Users').doc(userId).update({'showMeOnTinder': false});
   }
+
 }

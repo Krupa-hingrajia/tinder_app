@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -73,11 +74,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   model.imageFile == null
-                      ? CircleAvatar(
-                          backgroundImage: NetworkImage(widget.editArguments!.imageUrl.toString()),
-                          backgroundColor: Colors.white,
-                          maxRadius: MediaQuery.of(context).size.height * 0.08,
-                          minRadius: MediaQuery.of(context).size.width * 0.08,
+                      ? ClipOval(
+                          child: CachedNetworkImage(
+                            height: MediaQuery.of(context).size.height * 0.16,
+                            width: MediaQuery.of(context).size.width * 0.32,
+                            fit: BoxFit.cover,
+                            imageUrl: widget.editArguments!.imageUrl.toString(),
+                            placeholder: (context, url) => const CircularProgressIndicator(color: Colors.blue),
+                            errorWidget: (context, url, error) => const Icon(Icons.error),
+                          ),
                         )
                       : CircleAvatar(
                           backgroundImage: FileImage(model.imageFile!),
