@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -58,11 +59,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               height: MediaQuery.of(context).size.height * 1,
               child: Column(children: [
                 image != null
-                    ? CircleAvatar(
-                        backgroundImage: NetworkImage(image ?? ''),
-                        // backgroundColor: Colors.white,
-                        maxRadius: MediaQuery.of(context).size.height * 0.08,
-                        minRadius: MediaQuery.of(context).size.width * 0.08,
+                    ? ClipOval(
+                        child: CachedNetworkImage(
+                          height: MediaQuery.of(context).size.height * 0.17,
+                          width: MediaQuery.of(context).size.width * 0.34,
+                          fit: BoxFit.cover,
+                          imageUrl: image.toString(),
+                          placeholder: (context, url) => const CircularProgressIndicator(color: Colors.blue),
+                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                        ),
                       )
                     : CircleAvatar(
                         backgroundImage: const AssetImage(ImageConstant.user),
@@ -116,7 +121,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     )
                   ],
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.08),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.04),
                 CarouselSlider(
                   options: CarouselOptions(
                     height: 180.0,
@@ -156,7 +161,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 customButton(
                   text: 'MY TINDER PLUS',
-                  height: MediaQuery.of(context).size.height * 0.06,
+                  height: MediaQuery.of(context).size.height * 0.05,
                   width: MediaQuery.of(context).size.height * 0.24,
                   onPressed: () {
                     /// MY TINDER PLUS!

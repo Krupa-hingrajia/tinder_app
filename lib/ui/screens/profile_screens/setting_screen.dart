@@ -142,9 +142,9 @@ class _SettingScreenState extends State<SettingScreen> {
                 ),
                 const Divider(),
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.1,
+                  height: MediaQuery.of(context).size.height * 0.12,
                   decoration:
-                      BoxDecoration(color: Colors.black.withOpacity(.1), borderRadius: BorderRadius.circular(6)),
+                      BoxDecoration(color: Colors.black.withOpacity(.05), borderRadius: BorderRadius.circular(6)),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                     child: Column(

@@ -1,7 +1,14 @@
 class MessageArguments {
   String? title;
-  String? body;
   String? image;
+  String? id;
 
-  MessageArguments({this.title, this.body, this.image});
+  MessageArguments({this.title, this.image, this.id});
+}
+
+class PersonalMessageArguments {
+  String? title;
+  String? id;
+
+  PersonalMessageArguments({this.title, this.id});
 }

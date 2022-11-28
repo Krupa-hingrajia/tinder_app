@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:tinder_app_new/core/view_model/base_model.dart';
-import 'package:tinder_app_new/ui/screens/chat_screen.dart';
+import 'package:tinder_app_new/ui/screens/chat_screens/chat_screen.dart';
 import 'package:tinder_app_new/ui/screens/home_screen.dart';
-import 'package:tinder_app_new/ui/screens/notification_screen.dart';
+import 'package:tinder_app_new/ui/screens/notification_screens/notification_screen.dart';
 import 'package:tinder_app_new/ui/screens/profile_screens/profile_screen.dart';
 
 class AllScreenBottomViewModel extends BaseModel {
@@ -10,7 +10,7 @@ class AllScreenBottomViewModel extends BaseModel {
   static List<Widget> pages = <Widget>[
     const HomeScreen(),
     NotificationScreen(),
-    ChatScreen(),
+    const ChatScreen(),
     const ProfileScreen()
   ];
 }

@@ -77,8 +77,8 @@ class SignUpScreenViewModel extends BaseModel {
           'email': emailController.text,
           'gender': selectedValue.toString(),
           'image_url': imageUrl,
-          'isFavourite': false,
           'useToken': token,
+          'like_list': [],
           'id': id,
           'showMeOnTinder': true,
         })
