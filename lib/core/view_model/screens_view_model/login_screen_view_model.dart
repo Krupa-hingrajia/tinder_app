@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tinder_app_new/core/routing/routes.dart';
@@ -42,6 +43,14 @@ class LoginScreenViewModel extends BaseModel {
     await prefs.setString('email', email.toString());
     await prefs.setString('image', imageURL.toString());
     updateUI();
+  }
+
+  updateToken() async {
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    print('TOKEEEN   ::::--- $fcmToken');
+    await FirebaseFirestore.instance.collection("Users").doc(id).update({
+      "useToken": fcmToken,
+    });
   }
 
   signInUser({required BuildContext context}) async {

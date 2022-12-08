@@ -52,6 +52,10 @@ dependencies:
   cached_network_image: ^3.2.2
   card_swiper: ^2.0.4
   flutter_firebase_chat_core: ^1.6.4
+  intl: ^0.17.0
+  fluttertoast: ^8.1.1
+  toast: ^0.3.0
+  connectivity_plus: ^3.0.2
 
 dev_dependencies:
   flutter_test:

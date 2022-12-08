@@ -121,24 +121,30 @@ class _SettingScreenState extends State<SettingScreen> {
                     ],
                   ),
                 ),
-                RangeSlider(
-                  activeColor: Colors.blue,
-                  values: RangeValues(model.ageRange.start, model.ageRange.end),
-                  max: 100,
-                  divisions: 20,
-                  labels: RangeLabels(model.ageRange.start.round().toString(), model.ageRange.end.round().toString()),
-                  onChanged: (RangeValues values) async {
-                    setState(() {
-                      model.ageRange = values;
-                      model.ageValue =
-                          model.ageRange.toString().split('(')[1].split(')')[0].replaceAll(RegExp(r','), ' -');
-                      print('AGEEE :- ${model.ageValue}');
-                    });
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                    prefs.setString('ageRange', model.ageValue.toString());
-                    prefs.setStringList(
-                        'sliderGain', [model.ageRange.start.round().toString(), model.ageRange.end.round().toString()]);
-                  },
+                SliderTheme(
+                  data: SliderTheme.of(context).copyWith(
+                      valueIndicatorColor: Colors.white,
+                      inactiveTrackColor: const Color(0xFF8D8E98),
+                      activeTrackColor: Colors.blue,
+                      thumbColor: Colors.blue),
+                  child: RangeSlider(
+                    values: RangeValues(model.ageRange.start, model.ageRange.end),
+                    max: 100,
+                    divisions: 20,
+                    labels: RangeLabels(model.ageRange.start.round().toString(), model.ageRange.end.round().toString()),
+                    onChanged: (RangeValues values) async {
+                      setState(() {
+                        model.ageRange = values;
+                        model.ageValue =
+                            model.ageRange.toString().split('(')[1].split(')')[0].replaceAll(RegExp(r','), ' -');
+                        print('AGEEE :- ${model.ageValue}');
+                      });
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                      prefs.setString('ageRange', model.ageValue.toString());
+                      prefs.setStringList('sliderGain',
+                          [model.ageRange.start.round().toString(), model.ageRange.end.round().toString()]);
+                    },
+                  ),
                 ),
                 const Divider(),
                 Container(
@@ -178,9 +184,26 @@ class _SettingScreenState extends State<SettingScreen> {
                 IconButton(
                     onPressed: () async {
                       /// LOG OUT
-                      Navigator.pushNamed(context, Routes.loginScreen);
-                      SharedPreferences prefs = await SharedPreferences.getInstance();
-                      prefs.setBool('seen', false);
+                      showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                                title: const Text('Logout'),
+                                content: const Text('Do you want to exit this application?'),
+                                actions: <Widget>[
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Cancel', style: TextStyle(color: Colors.blue))),
+                                  TextButton(
+                                      onPressed: () async {
+                                        Navigator.pushNamed(context, Routes.loginScreen);
+                                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                                        prefs.setBool('seen', false);
+                                      },
+                                      child: const Text('OK', style: TextStyle(color: Colors.blue))),
+                                ],
+                              ));
                     },
                     icon: const Icon(Icons.logout, size: 28)),
                 const SizedBox(height: 2),
