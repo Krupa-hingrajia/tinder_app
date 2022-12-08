@@ -8,7 +8,10 @@ class MessageArguments {
 
 class PersonalMessageArguments {
   String? title;
-  String? id;
+  String? profileId;
+  String? messageId;
+  String? senderId;
+  String? receiverId;
 
-  PersonalMessageArguments({this.title, this.id});
+  PersonalMessageArguments({this.title, this.profileId, this.senderId, this.receiverId, this.messageId});
 }

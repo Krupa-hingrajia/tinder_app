@@ -6,6 +6,7 @@ class ImageConstant {
   static const String addUser = 'assets/image/add-user.png';
   static String camera = 'assets/image/camera.png';
   static const String check = 'assets/image/check.png';
+  static const String doubleCheck = 'assets/image/double-check.png';
   static const String heart = 'assets/image/like.png';
   static const String fillHeart = 'assets/image/heart.png';
   static const String tinder = 'assets/image/tinder.png';

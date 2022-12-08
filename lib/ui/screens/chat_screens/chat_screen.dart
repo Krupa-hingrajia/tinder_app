@@ -18,12 +18,14 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   ChatScreenViewModel? model;
+  String? messageId;
   List<ProfilePicture> profilePicture = [];
   List<ChatRoomId> chatRoomID = [];
   FirebaseFirestore firebase = FirebaseFirestore.instance;
   List<dynamic> statusList = [];
   List<dynamic> confirmList = [];
   String? userId;
+  String? name;
 
   @override
   void initState() {
@@ -31,7 +33,7 @@ class _ChatScreenState extends State<ChatScreen> {
     SharedPreferences.getInstance().then((prefValue) => {
           setState(() {
             userId = prefValue.getString('id');
-            print('USER IDD $userId');
+            name = prefValue.getString('name');
           })
         });
   }
@@ -60,26 +62,35 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  setId(int index) {
-    FirebaseFirestore.instance
-        .collection('ChatRoom')
-        .add({'senderId': userId, 'receiverId': profilePicture[index].id, 'name': profilePicture[index].userName});
+  setId(int index) async {
+    String id = firebase.collection("ChatRoom").doc().id;
+    messageId = id;
+    firebase.collection('ChatRoom').doc(id).set({
+      'senderId': userId,
+      'receiverId': profilePicture[index].id,
+      'id': id,
+      'in_chat_receiver': false,
+      'in_chat_sender': false
+    });
   }
 
   chatRoomId(int index) async {
     var data = await firebase.collection('ChatRoom').get();
     chatRoomID.clear();
     for (int i = 0; i < data.docs.length; i++) {
-      ChatRoomId model = ChatRoomId(data.docs[i].data()['senderId'], data.docs[i].data()['receiverId']);
+      ChatRoomId model =
+          ChatRoomId(data.docs[i].data()['senderId'], data.docs[i].data()['receiverId'], data.docs[i].data()['id']);
       chatRoomID.add(model);
     }
-    print("chatROOM   ${chatRoomID.map((e) => e.receiverId == profilePicture[index].id)}");
-    bool isSet = chatRoomID.any((e) => e.receiverId == profilePicture[index].id && e.senderId == userId);
-    print('isSET  $isSet');
-    if (isSet == false) {
+
+    /// CONDITION...
+    int findIndex = chatRoomID.indexWhere((e) =>
+        (e.receiverId == profilePicture[index].id && e.senderId == userId) ||
+        (e.receiverId == userId && e.senderId == profilePicture[index].id));
+    if (findIndex == -1) {
       setId(index);
     } else {
-      print('ELSEEE');
+      messageId = chatRoomID[findIndex].id;
     }
   }
 
@@ -89,14 +100,13 @@ class _ChatScreenState extends State<ChatScreen> {
       builder: (buildContext, model, child) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Messages'),
-            flexibleSpace: Container(
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                colors: <Color>[ColorConstant.greenLight, ColorConstant.greenLight],
+              title: const Text('Messages'),
+              flexibleSpace: Container(
+                decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                  colors: <Color>[ColorConstant.greenLight, ColorConstant.greenLight],
+                )),
               )),
-            ),
-          ),
           body: Column(
             children: [
               Container(
@@ -129,12 +139,15 @@ class _ChatScreenState extends State<ChatScreen> {
                           itemBuilder: (BuildContext context, int index) {
                             if (model.searchController.text.isEmpty) {
                               return GestureDetector(
-                                onTap: () {
+                                onTap: () async {
                                   /// PERSONAL USER CHAT SCREEN
-                                  chatRoomId(index);
+                                  await chatRoomId(index);
+                                  // ignore: use_build_context_synchronously
                                   Navigator.pushNamed(context, Routes.personalChatScreen,
                                       arguments: PersonalMessageArguments(
-                                          title: profilePicture[index].userName, id: profilePicture[index].id));
+                                          title: profilePicture[index].userName,
+                                          profileId: profilePicture[index].id,
+                                          messageId: messageId));
                                 },
                                 child: Container(
                                   margin: const EdgeInsets.only(right: 10, left: 10, bottom: 5),
@@ -234,7 +247,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               );
                             } else {
                               return Container();
-                            }
+                             }
                           });
                     }
                     return const Center(child: CircularProgressIndicator(color: ColorConstant.greenLight));

@@ -105,7 +105,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 model.loginCircular = false;
                                 setState(() {});
                                 model.signInUser(context: context);
-                                model.getUserDetail();
+                                await model.getUserDetail();
+                                await model.updateToken();
                                 model.loginCircular = true;
                                 setState(() {});
                               }

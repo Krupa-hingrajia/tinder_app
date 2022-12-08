@@ -47,11 +47,13 @@ customTextField(
 chatScreenTextField({
   TextEditingController? controller,
   ValueChanged<String>? onChanged,
+  GestureTapCallback? onTap,
   Widget? prefixIcon,
   Widget? suffixIcon,
   String? hintText,
 }) {
   return TextField(
+    onTap: onTap,
       cursorHeight: 24,
       keyboardType: TextInputType.multiline,
       minLines: 1,

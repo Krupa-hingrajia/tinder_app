@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:after_layout/after_layout.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tinder_app_new/core/constant/color_constant.dart';
@@ -8,6 +9,8 @@ import 'package:tinder_app_new/core/constant/image_constant.dart';
 import 'package:tinder_app_new/core/routing/routes.dart';
 import 'package:tinder_app_new/core/view_model/base_view.dart';
 import 'package:tinder_app_new/core/view_model/screens_view_model/splash_screen_view_model.dart';
+
+import '../../core/utils/register_notification.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -62,8 +65,10 @@ class _SplashScreenState extends State<SplashScreen> with AfterLayoutMixin<Splas
           ),
         );
       },
-      onModelReady: (model) {
+      onModelReady: (model) async {
         this.model = model;
+        await setupFlutterNotifications();
+        FirebaseMessaging.onMessage.listen(showFlutterNotification);
       },
     );
   }

@@ -9,8 +9,7 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tinder_app_new/core/constant/color_constant.dart';
 import 'package:tinder_app_new/core/enum/viewstate.dart';
-import 'package:tinder_app_new/core/model/message_model.dart';
-import 'package:tinder_app_new/core/routing/routes.dart';
+import 'package:tinder_app_new/core/utils/register_notification.dart';
 import 'package:tinder_app_new/core/view_model/base_view.dart';
 import 'package:tinder_app_new/core/view_model/screens_view_model/cards_stack_widget_view_model.dart';
 
@@ -53,10 +52,6 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
             ageRangeGet = prefValue.getString('ageRange');
             showTinderGet = prefValue.getBool('switchState');
             id = prefValue.getString('id');
-            print('GENDER :- $genderGet');
-            print('AGE Range :- $ageRangeGet');
-            print('showTinderGet :- $showTinderGet');
-            print('IDDD  :- $id');
           })
         });
     _animationController = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
@@ -67,7 +62,6 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
         swipeNotifier.value = Swipe.none;
       }
     });
-    registerNotification();
   }
 
   getImages() async {
@@ -137,10 +131,10 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
                                   isLastCard: true,
                                   onPressedLike: () async {
                                     profileImage = profilePicture[index].imageURL;
-                                    sendPushMessage(profilePicture[index].id.toString());
+                                    // sendPushMessage(profilePicture[index].id.toString());
                                     swipeNotifier.value = Swipe.right;
                                     _animationController.forward();
-                                    addLike(profilePicture[index].id.toString());
+                                    model.addLike(id!, profilePicture[index].id.toString());
                                     print('PROFILE ID :- ${profilePicture[index].id.toString()}');
                                   },
                                   onPressedCancel: () {
@@ -156,10 +150,10 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
                               index: index,
                               swipeNotifier: swipeNotifier,
                               onPressedLike: () {
-                                sendPushMessage(profilePicture[index].id.toString());
+                                // sendPushMessage(profilePicture[index].id.toString());
                                 swipeNotifier.value = Swipe.right;
                                 _animationController.forward();
-                                addLike(profilePicture[index].id.toString());
+                                model.addLike(id!, profilePicture[index].id.toString());
                               },
                               onPressedCancel: () {
                                 swipeNotifier.value = Swipe.left;
@@ -212,84 +206,75 @@ class _CardsStackWidgetState extends State<CardsStackWidget> with SingleTickerPr
     );
   }
 
-  addLike(String userId) async {
-    FirebaseFirestore.instance.collection("Users").doc(userId).update({
-      "like_list": FieldValue.arrayUnion([
-        {'id': id, 'status': "send"}
-      ]),
-    });
-  }
-
-  void registerNotification() async {
-    await Firebase.initializeApp();
-    _messaging = FirebaseMessaging.instance;
-    // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-    NotificationSettings settings =
-        await _messaging.requestPermission(alert: true, badge: true, provisional: false, sound: true);
-
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        showSimpleNotification(
-          background: ColorConstant.white,
-          elevation: 0,
-          autoDismiss: true,
-          slideDismiss: true,
-          duration: const Duration(seconds: 5),
-          GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, Routes.notificationScreen,
-                    arguments: MessageArguments(title: message.data['name'], image: message.data['image'], id: id));
-              },
-              child: Text(message.notification!.title.toString(), style: const TextStyle(color: Colors.black))),
-          leading: const NotificationBadge(),
-          subtitle: Text(message.notification!.body.toString(), style: const TextStyle(color: Colors.black)),
-        );
-      });
-    } else {
-      print('User declined or has not accepted permission');
-    }
-  }
-
-  Future<void> sendPushMessage(String userId) async {
-    final querySnapshot = await firebase.collection('Users').where('id', isEqualTo: userId).get();
-
-    for (var element in querySnapshot.docs) {
-      model!.userToken = element.get('useToken');
-      model!.userName = element.get('name');
-      model!.image = element.get('image_url');
-      print('TOKEN ::- ${model!.userToken}');
-    }
-
-    try {
-      var headers = {
-        'Authorization':
-            'key=AAAA0FDqNaQ:APA91bEaEPf-lW6D4W3pXPyaI1QJKWHhYUrCHK0riCvOPvVN_LTmrrEjcLNUtHbWVuRfdBeRksSh8mY8Bxzr3IEBKLx6TovbQQzEnJG6tNKf6JjmAl10sLuW64u1C2dgPNiXa3i6Re9I',
-        'Content-Type': 'application/json'
-      };
-      var request = http.Request('POST', Uri.parse('https://fcm.googleapis.com/fcm/send'));
-      request.body = json.encode({
-        "to":
-            "e5Dj53c-T76Tam-IeEAYel:APA91bE0LOHrKtK6M01Vfdodc5nBqpfps4-drsTzZZpL4rQ-4vsfZU_aMVhVbMT0a9Bzm6Yybb4ueOMCLq1-lgGjXtFLxji3ij56FlW9RxxLVbUptIQWk2isCRUXfSb7s8I6Edt9fZyo",
-        "data": {"name": model!.userName, "image": model!.image},
-        "notification": {
-          "title": "Tinder 😍😍😍",
-          "body": "${model!.userName} send you match request!!",
-        }
-      });
-      request.headers.addAll(headers);
-
-      http.StreamedResponse response = await request.send();
-
-      if (response.statusCode == 200) {
-        print(await response.stream.bytesToString());
-      } else {
-        print(response.reasonPhrase);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
+  // void registerNotification() async {
+  //   await Firebase.initializeApp();
+  //   _messaging = FirebaseMessaging.instance;
+  //   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  //
+  //   NotificationSettings settings =
+  //       await _messaging.requestPermission(alert: true, badge: true, provisional: false, sound: true);
+  //
+  //   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+  //     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  //       showSimpleNotification(
+  //         background: ColorConstant.white,
+  //         elevation: 0,
+  //         autoDismiss: true,
+  //         slideDismiss: true,
+  //         duration: const Duration(seconds: 5),
+  //         GestureDetector(
+  //             /*onTap: () {
+  //               Navigator.pushNamed(context, Routes.notificationScreen,
+  //                   arguments: MessageArguments(title: message.data['name'], image: message.data['image'], id: id));
+  //             },*/
+  //             child: Text(message.notification!.title.toString(), style: const TextStyle(color: Colors.black))),
+  //         leading: const NotificationBadge(),
+  //         subtitle: Text(message.notification!.body.toString(), style: const TextStyle(color: Colors.black)),
+  //       );
+  //     });
+  //   } else {
+  //     print('User declined or has not accepted permission');
+  //   }
+  // }
+  //
+  // Future<void> sendPushMessage(String userId) async {
+  //   final querySnapshot = await firebase.collection('Users').where('id', isEqualTo: userId).get();
+  //
+  //   for (var element in querySnapshot.docs) {
+  //     model!.userToken = element.get('useToken');
+  //     model!.userName = element.get('name');
+  //     model!.image = element.get('image_url');
+  //     print('TOKEN ::- ${model!.userToken}');
+  //   }
+  //
+  //   try {
+  //     var headers = {
+  //       'Authorization':
+  //           'key=AAAA0FDqNaQ:APA91bEaEPf-lW6D4W3pXPyaI1QJKWHhYUrCHK0riCvOPvVN_LTmrrEjcLNUtHbWVuRfdBeRksSh8mY8Bxzr3IEBKLx6TovbQQzEnJG6tNKf6JjmAl10sLuW64u1C2dgPNiXa3i6Re9I',
+  //       'Content-Type': 'application/json'
+  //     };
+  //     var request = http.Request('POST', Uri.parse('https://fcm.googleapis.com/fcm/send'));
+  //     request.body = json.encode({
+  //       "to": model!.userToken,
+  //       "data": {"name": model!.userName, "image": model!.image},
+  //       "notification": {
+  //         "title": "Tinder 😍😍😍",
+  //         "body": "${model!.userName} send you match request!!",
+  //       }
+  //     });
+  //     request.headers.addAll(headers);
+  //
+  //     http.StreamedResponse response = await request.send();
+  //
+  //     if (response.statusCode == 200) {
+  //       print(await response.stream.bytesToString());
+  //     } else {
+  //       print(response.reasonPhrase);
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 }
 /*Stack(clipBehavior: Clip.none, children: [
           FutureBuilder(

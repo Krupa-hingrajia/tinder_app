@@ -21,11 +21,9 @@ class NotificationScreen extends StatefulWidget {
 
 class _NotificationScreenState extends State<NotificationScreen> {
   NotificationScreenViewModel? model;
-  List<ProfilePicture> notificationStatus = [];
-  List likeList = [];
-  List confirmList = [];
   FirebaseFirestore firebase = FirebaseFirestore.instance;
   String? id;
+  List<dynamic> likeList = [];
 
   @override
   void initState() {
@@ -48,18 +46,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         }
       }
     });
-    sendNotification();
     setState(() {});
-  }
-
-  sendNotification() async {
-    var data = await firebase.collection('Users').where('id', whereIn: likeList).get();
-    notificationStatus.clear();
-    for (int i = 0; i < data.docs.length; i++) {
-      ProfilePicture model = ProfilePicture(data.docs[i].data()['image_url'], data.docs[i].data()['name'],
-          data.docs[i].data()['gender'], data.docs[i].data()['id'], data.docs[i].data()['like_list']);
-      notificationStatus.add(model);
-    }
   }
 
   @override
@@ -97,14 +84,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   ),
                 ),
                 Expanded(
-                  child: FutureBuilder(
-                    future: sendNotification(),
-                    builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
+                  child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                    stream: likeList.isNotEmpty
+                        ? firebase.collection('Users').where('id', whereIn: likeList).snapshots()
+                        : null,
+                    builder: (BuildContext context, snapshot) {
+                      if (snapshot.hasData) {
+                        List<QueryDocumentSnapshot<Map<String, dynamic>>> data = snapshot.data!.docs;
                         return ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.vertical,
-                            itemCount: notificationStatus.length,
+                            itemCount: likeList.length,
                             itemBuilder: (context, index) {
                               if (model.searchController.text.isEmpty) {
                                 return Padding(
@@ -117,15 +107,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                             /// Request Sender Profile
                                             Navigator.pushNamed(context, Routes.requestSenderScreen,
                                                 arguments: MessageArguments(
-                                                    image: notificationStatus[index].imageURL.toString(),
-                                                    title: notificationStatus[index].userName));
+                                                    image: data[index].get('image_url').toString(),
+                                                    title: data[index].get('name')));
                                           },
                                           child: ClipOval(
                                             child: CachedNetworkImage(
                                               height: MediaQuery.of(context).size.height * 0.084,
                                               width: MediaQuery.of(context).size.width * 0.17,
                                               fit: BoxFit.cover,
-                                              imageUrl: notificationStatus[index].imageURL.toString(),
+                                              imageUrl: data[index].get('image_url').toString(),
                                               placeholder: (context, url) =>
                                                   const CircularProgressIndicator(color: Colors.blue),
                                               errorWidget: (context, url, error) => const Icon(Icons.error),
@@ -134,7 +124,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                         ),
                                         const SizedBox(width: 5),
                                         FittedBox(
-                                          child: Text("${notificationStatus[index].userName} send a \nmatch request!!",
+                                          child: Text("${data[index].get('name')} send a \nmatch request!!",
                                               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                                         ),
                                         const Spacer(),
@@ -143,8 +133,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                           child: ElevatedButton(
                                               style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
                                               onPressed: () {
-                                                model.deleteNotification(id!, notificationStatus[index].id.toString());
-                                                model.confirmNotification(id!, notificationStatus[index].id.toString());
+                                                model.deleteNotification(id!, data[index].get('id').toString());
+                                                model.confirmNotification(id!, data[index].get('id').toString());
+                                                likeList.remove(data[index].get('id'));
                                                 setState(() {});
                                               },
                                               child: const Text('Confirm')),
@@ -155,7 +146,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                           child: ElevatedButton(
                                               style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
                                               onPressed: () {
-                                                model.deleteNotification(id!, notificationStatus[index].id.toString());
+                                                model.deleteNotification(id!, data[index].get('id').toString());
+                                                likeList.remove(data[index].get('id'));
                                                 setState(() {});
                                               },
                                               child: const Text('Delete')),
@@ -165,7 +157,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     ],
                                   ),
                                 );
-                              } else if (notificationStatus[index]
+                              }
+                              /*else if (notificationStatus[index]
                                       .userName
                                       .toString()
                                       .toLowerCase()
@@ -233,7 +226,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     ],
                                   ),
                                 );
-                              } else {
+                              }*/
+                              else {
                                 return Container();
                               }
                             });
@@ -245,9 +239,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
               ],
             ));
       },
-      onModelReady: (model) {
+      onModelReady: (model) async {
         this.model = model;
-        getLikeList();
+        await getLikeList();
         // sendNotification();
       },
     );

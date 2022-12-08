@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       );
-    }, onModelReady: (model) {
+    }, onModelReady: (model) async {
       this.model = model;
     });
   }
