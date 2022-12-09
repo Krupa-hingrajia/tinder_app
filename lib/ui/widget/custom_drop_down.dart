@@ -20,7 +20,7 @@ dropDownWidget({
     decoration: decoration ?? BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all()
   ),
     child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(4.0),
         child: DropdownButton(
           value: dropDownValue,
           isExpanded: true,

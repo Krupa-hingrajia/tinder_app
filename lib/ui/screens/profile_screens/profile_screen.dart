@@ -103,9 +103,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             iconBtn(
                                 child: const Icon(Icons.camera_alt, color: ColorConstant.black, size: 32),
                                 text: 'ADD MEDIA',
-                                color: ColorConstant.yellowLight,
-                                maxRadius: 65,
-                                minRadius: 65),
+                                color: ColorConstant.yellowLight),
                           ])),
                     ),
                     GestureDetector(
@@ -161,9 +159,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 customButton(
                   text: 'MY TINDER PLUS',
-                  height: MediaQuery.of(context).size.height * 0.05,
+                  height: MediaQuery.of(context).size.height * 0.06,
                   width: MediaQuery.of(context).size.height * 0.24,
-                  onPressed: () {
+                  onTap: () {
                     /// MY TINDER PLUS!
                   },
                 )
