@@ -182,10 +182,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(height: MediaQuery.of(context).size.height * 0.025),
                   customButton(
                       text: 'Create account',
+                      color: Colors.white,
                       circular: model.signupCircular,
                       height: MediaQuery.of(context).size.height * 0.052,
                       width: MediaQuery.of(context).size.width * 0.45,
-                      onPressed: () async {
+                      onTap: () async {
                         if (model.formKey.currentState!.validate()) {
                           if (imageFile == null) {
                             model.imageError = true;
@@ -194,7 +195,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             model.selectGender = true;
                             setState(() {});
                           } else {
-                            model.signupCircular = false;
+                            model.signupCircular = true;
                             setState(() {});
                             model.createUser(context: context);
                             model.addTinderUser();
@@ -202,7 +203,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             model.imageError == true || model.selectGender == true
                                 ? model.signupCircular = false
                                 : model.signupCircular = true;
-                            model.signupCircular = true;
+                            model.signupCircular = false;
                             setState(() {});
                           }
                         }

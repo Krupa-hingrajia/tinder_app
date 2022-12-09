@@ -97,17 +97,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         ]),
                         customButton(
                             text: "Login",
+                            color: Colors.white,
                             circular: model.loginCircular,
                             height: MediaQuery.of(context).size.height * 0.052,
                             width: MediaQuery.of(context).size.width * 0.4,
-                            onPressed: () async {
+                            onTap: () async {
                               if (model.formKey.currentState!.validate()) {
-                                model.loginCircular = false;
+                                model.loginCircular = true;
                                 setState(() {});
                                 model.signInUser(context: context);
                                 await model.getUserDetail();
                                 await model.updateToken();
-                                model.loginCircular = true;
+                                model.loginCircular = false;
                                 setState(() {});
                               }
                             })

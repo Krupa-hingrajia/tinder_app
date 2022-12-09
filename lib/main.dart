@@ -17,7 +17,7 @@ Future<void> main() async {
   final fcmToken = await FirebaseMessaging.instance.getToken();
   print(fcmToken);
   SharedPreferences.getInstance().then((prefs) {
-    var darkModeOn = prefs.getBool("darkMode") ?? true;
+    var darkModeOn = prefs.getBool("darkMode") ?? false;  //true;
 
     runApp(ChangeNotifierProvider<ThemeNotifier>(
       create: (context) {

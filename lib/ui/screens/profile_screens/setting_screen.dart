@@ -148,7 +148,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 ),
                 const Divider(),
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.12,
+                  height: MediaQuery.of(context).size.height * 0.11,
                   decoration:
                       BoxDecoration(color: Colors.black.withOpacity(.05), borderRadius: BorderRadius.circular(6)),
                   child: Padding(
@@ -201,7 +201,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                         SharedPreferences prefs = await SharedPreferences.getInstance();
                                         prefs.setBool('seen', false);
                                       },
-                                      child: const Text('OK', style: TextStyle(color: Colors.blue))),
+                                      child: const Text('Exit', style: TextStyle(color: Colors.blue))),
                                 ],
                               ));
                     },
@@ -213,8 +213,8 @@ class _SettingScreenState extends State<SettingScreen> {
         );
       },
       onModelReady: (model) {
-        model.getDate();
         this.model = model;
+        model.getDate();
       },
     );
   }
